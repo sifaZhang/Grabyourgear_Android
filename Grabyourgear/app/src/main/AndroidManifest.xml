@@ -12,14 +12,47 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Grabyourgear">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".service.ServiceDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".supplier.SupplierDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AdminDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".auth.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.CustomerMyBookingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.CustomerBookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.CustomerEquipmentDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.CustomerEquipmentListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".customer.CustomerDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".auth.SplashActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".auth.RegisterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".auth.LoginActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
