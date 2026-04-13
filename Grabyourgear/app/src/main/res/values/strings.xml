@@ -1,9 +1,3 @@
 <resources>
     <string name="app_name">grabyourgear</string>
-    <string-array name="roles">
-        <item>Customer</item>
-        <item>Supplier</item>
-        <item>Administrator</item>
-        <item>Customer Service</item>
-    </string-array>
 </resources>

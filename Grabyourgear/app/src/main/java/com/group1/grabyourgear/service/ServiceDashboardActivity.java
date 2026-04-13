@@ -24,6 +24,8 @@ public class ServiceDashboardActivity extends BaseActivity {
             return insets;
         });
 
+        setHeaderTitle("Service Dashboard");
+
 //        if(UserManager.getInstance().isApproved()) {
 //            // show functionality
 //        } else {

@@ -25,6 +25,8 @@ public class AdminDashboardActivity extends BaseActivity {
             return insets;
         });
 
+        setHeaderTitle("Admin Dashboard");
+
 //        if(UserManager.getInstance().isApproved()) {
 //            // show functionality
 //        } else {

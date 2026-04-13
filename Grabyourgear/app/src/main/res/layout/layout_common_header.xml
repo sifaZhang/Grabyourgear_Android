@@ -1,9 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:background="@drawable/title_bar"
-    android:scaleType="centerCrop">
+    android:background="@drawable/title_bar">
+
+    <!-- logo -->
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/logo"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="2dp"/>
 
     <!-- title -->
     <TextView
@@ -14,20 +22,37 @@
         android:textColor="@android:color/white"
         android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_centerInParent="true" />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
 
-    <!-- avatar -->
-    <ImageView
-        android:id="@+id/imgAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/placeholder_avatar"
+    <!-- right zone：username + avatar -->
+    <LinearLayout
+        android:id="@+id/rightContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:scaleType="centerCrop"
-        android:background="@drawable/avatar_circle"
-        android:clipToOutline="true"
-        android:layout_marginRight="12dp"/>
+        android:layout_marginEnd="4dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:layout_marginEnd="6dp"
+            android:text="Username" />
+
+        <ImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/placeholder_avatar"
+            android:background="@drawable/avatar_circle"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
 
 </RelativeLayout>

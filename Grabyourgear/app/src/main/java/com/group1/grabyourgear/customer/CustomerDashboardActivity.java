@@ -1,6 +1,7 @@
 package com.group1.grabyourgear.customer;
 
 import android.os.Bundle;
+import android.os.health.ServiceHealthStats;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,5 +24,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        setHeaderTitle("GrabYourGear");
     }
 }

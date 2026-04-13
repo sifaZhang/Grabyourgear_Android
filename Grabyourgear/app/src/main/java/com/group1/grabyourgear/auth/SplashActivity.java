@@ -16,11 +16,12 @@ import com.group1.grabyourgear.customer.CustomerDashboardActivity;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.service.ServiceDashboardActivity;
 import com.group1.grabyourgear.supplier.SupplierDashboardActivity;
+import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.FirebaseHelper_Users;
 import com.group1.grabyourgear.utils.UserManager;
 import com.group1.grabyourgear.utils.UserPrefs;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,32 +64,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void goToLogin() {
-        startActivity(new Intent(this, RegisterActivity.class));
+        startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-
-    private void goToDashboard(String role) {
-        switch (role) {
-            case AppConstants.Role.CUSTOMER:
-                startActivity(new Intent(this, CustomerDashboardActivity.class));
-                finish();
-                break;
-            case AppConstants.Role.SUPPLIER:
-                startActivity(new Intent(this, SupplierDashboardActivity.class));
-                finish();
-                break;
-            case AppConstants.Role.SERVICE:
-                startActivity(new Intent(this, ServiceDashboardActivity.class));
-                finish();
-                break;
-            case AppConstants.Role.ADMIN:
-                startActivity(new Intent(this, AdminDashboardActivity.class));
-                finish();
-                break;
-            default:
-                goToLogin();
-                break;
-        }
-    }
-
 }

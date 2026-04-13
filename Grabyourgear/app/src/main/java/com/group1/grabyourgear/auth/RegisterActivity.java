@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,6 +23,9 @@ import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.FirebaseHelper_Users;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -41,6 +45,8 @@ public class RegisterActivity extends BaseActivity {
             return insets;
         });
 
+        setHeaderTitle("Registration");
+
         btnRegister = findViewById(R.id.btnRegister);
         etAddress = findViewById(R.id.etAddress);
         etEmail = findViewById(R.id.etEmail);
@@ -55,6 +61,15 @@ public class RegisterActivity extends BaseActivity {
         tvLogin.setText(Html.fromHtml("Already have an account? <u>Login</u>",
                 Html.FROM_HTML_MODE_LEGACY));
 
+        List<String> roles = Arrays.asList(AppConstants.Role.CUSTOMER, AppConstants.Role.SUPPLIER, AppConstants.Role.ADMIN, AppConstants.Role.SERVICE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                roles
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spRole.setAdapter(adapter);
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,12 +78,11 @@ public class RegisterActivity extends BaseActivity {
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
                 String confirmPassword = etRePassword.getText().toString().trim();
-                String UIRole = spRole.getSelectedItem().toString();
+                String role = spRole.getSelectedItem().toString();
                 String phone = etPhone.getText().toString().trim();
                 String address = etAddress.getText().toString().trim();
                 String username = etUsername.getText().toString().trim();
-                String sysRole = convertRole(UIRole);
-                boolean isApproved = isApproved(sysRole);
+                boolean isApproved = isApproved(role);
 
                 // basic check
                 if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
@@ -102,7 +116,7 @@ public class RegisterActivity extends BaseActivity {
                                     email,
                                     phone,
                                     address,
-                                    sysRole,
+                                    role,
                                     "",
                                     isApproved
                             );
@@ -139,21 +153,6 @@ public class RegisterActivity extends BaseActivity {
                 finish();
             }
         });
-    }
-
-    private String convertRole(String role) {
-        switch (role) {
-            case "Customer":
-                return AppConstants.Role.CUSTOMER;
-            case "Supplier":
-                return AppConstants.Role.SUPPLIER;
-            case "Administrator":
-                return AppConstants.Role.ADMIN;
-            case "Customer Service":
-                return AppConstants.Role.SERVICE;
-            default:
-                return "";
-        }
     }
 
     private boolean isApproved(String role) {

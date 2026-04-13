@@ -24,6 +24,8 @@ public class SupplierDashboardActivity extends BaseActivity {
             return insets;
         });
 
+        setHeaderTitle("Supplier Dashboard");
+
 //        if(UserManager.getInstance().isApproved()) {
 //            // show functionality
 //        } else {

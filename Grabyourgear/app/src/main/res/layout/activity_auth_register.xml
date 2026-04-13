@@ -24,15 +24,6 @@
             android:src="@drawable/image_bar"
             android:adjustViewBounds="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registration"
-            android:textStyle="bold"
-            android:textColor="#006400"
-            android:padding="12dp"
-            android:textSize="28sp" />
-
         <!-- Full Name -->
         <LinearLayout
             android:orientation="horizontal"
@@ -216,8 +207,7 @@
                 android:id="@+id/spRole"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:entries="@array/roles" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <!-- Register Button -->
@@ -226,11 +216,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Register"
-            android:textStyle="bold"
-            android:backgroundTint="#006400"
-            android:textColor="@android:color/white"
-            android:layout_margin="16dp"
-            android:textSize="18sp"/>
+            style="@style/AppButtonPrimaryStyle"
+            android:layout_margin="16dp" />
 
         <!-- Login Link -->
         <TextView
