@@ -5,7 +5,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Users;
 
-public class FirebaseHelper {
+public class FirebaseHelper_Users {
 
     private static final DatabaseReference USERS_REF =
             FirebaseDatabase.getInstance().getReference(FirebaseNodes.USERS);

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -22,7 +21,7 @@ import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.utils.BaseActivity;
-import com.group1.grabyourgear.utils.FirebaseHelper;
+import com.group1.grabyourgear.utils.FirebaseHelper_Users;
 
 public class RegisterActivity extends BaseActivity {
 
@@ -108,7 +107,7 @@ public class RegisterActivity extends BaseActivity {
                                     isApproved
                             );
 
-                            FirebaseHelper.registerUser(user, new FirebaseHelper.RegisterCallback() {
+                            FirebaseHelper_Users.registerUser(user, new FirebaseHelper_Users.RegisterCallback() {
                                 @Override
                                 public void onSuccess() {
                                     Toast.makeText(RegisterActivity.this, "Register success", Toast.LENGTH_SHORT).show();

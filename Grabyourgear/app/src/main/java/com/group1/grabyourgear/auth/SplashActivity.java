@@ -2,7 +2,6 @@ package com.group1.grabyourgear.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,14 +9,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.admin.AdminDashboardActivity;
 import com.group1.grabyourgear.common.AppConstants;
@@ -25,8 +16,7 @@ import com.group1.grabyourgear.customer.CustomerDashboardActivity;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.service.ServiceDashboardActivity;
 import com.group1.grabyourgear.supplier.SupplierDashboardActivity;
-import com.group1.grabyourgear.utils.FirebaseHelper;
-import com.group1.grabyourgear.utils.TestActivity;
+import com.group1.grabyourgear.utils.FirebaseHelper_Users;
 import com.group1.grabyourgear.utils.UserManager;
 import com.group1.grabyourgear.utils.UserPrefs;
 
@@ -54,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
         Users currentUser = UserManager.getInstance().getUser();
 
         if (currentUser == null) {
-            FirebaseHelper.loadUserInfo(uid, new FirebaseHelper.UserCallback() {
+            FirebaseHelper_Users.loadUserInfo(uid, new FirebaseHelper_Users.UserCallback() {
                 @Override
                 public void onSuccess(Users user) {
                     UserManager.getInstance().setUser(user);
