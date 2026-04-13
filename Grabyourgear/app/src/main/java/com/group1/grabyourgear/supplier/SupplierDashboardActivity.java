@@ -9,8 +9,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.utils.BaseActivity;
 
-public class SupplierDashboardActivity extends AppCompatActivity {
+public class SupplierDashboardActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,5 +23,11 @@ public class SupplierDashboardActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+//        if(UserManager.getInstance().isApproved()) {
+//            // show functionality
+//        } else {
+//            // show not approved message
+//        }
     }
 }

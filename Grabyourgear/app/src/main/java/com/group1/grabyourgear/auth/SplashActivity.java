@@ -19,7 +19,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.admin.AdminDashboardActivity;
+import com.group1.grabyourgear.common.AppConstants;
+import com.group1.grabyourgear.customer.CustomerDashboardActivity;
+import com.group1.grabyourgear.models.Users;
+import com.group1.grabyourgear.service.ServiceDashboardActivity;
+import com.group1.grabyourgear.supplier.SupplierDashboardActivity;
+import com.group1.grabyourgear.utils.FirebaseHelper;
 import com.group1.grabyourgear.utils.TestActivity;
+import com.group1.grabyourgear.utils.UserManager;
+import com.group1.grabyourgear.utils.UserPrefs;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -34,8 +43,62 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
 
-       Intent intent = new Intent(this, TestActivity.class);
-        startActivity(intent);
+        UserPrefs prefs = new UserPrefs(this);
+        String uid = prefs.getUid();
+
+        if (!prefs.isLoggedIn() || uid == null) {
+            goToLogin();
+            return;
+        }
+
+        Users currentUser = UserManager.getInstance().getUser();
+
+        if (currentUser == null) {
+            FirebaseHelper.loadUserInfo(uid, new FirebaseHelper.UserCallback() {
+                @Override
+                public void onSuccess(Users user) {
+                    UserManager.getInstance().setUser(user);
+                    goToDashboard(user.role);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    goToLogin(); // 数据损坏或网络问题
+                }
+            });
+        }
+        else {
+            goToDashboard(currentUser.role);
+        }
+    }
+
+    private void goToLogin() {
+        startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
+
+    private void goToDashboard(String role) {
+        switch (role) {
+            case AppConstants.Role.CUSTOMER:
+                startActivity(new Intent(this, CustomerDashboardActivity.class));
+                finish();
+                break;
+            case AppConstants.Role.SUPPLIER:
+                startActivity(new Intent(this, SupplierDashboardActivity.class));
+                finish();
+                break;
+            case AppConstants.Role.SERVICE:
+                startActivity(new Intent(this, ServiceDashboardActivity.class));
+                finish();
+                break;
+            case AppConstants.Role.ADMIN:
+                startActivity(new Intent(this, AdminDashboardActivity.class));
+                finish();
+                break;
+            default:
+                goToLogin();
+                break;
+        }
+    }
+
 }

@@ -84,7 +84,7 @@ public class TestActivity extends AppCompatActivity {
     private void showImage(String url) {
         Glide.with(this)
                 .load(url)
-                .placeholder(R.drawable.placeholder_equipment)
+                .placeholder(R.drawable.placeholder_general)
                 .into(imgResult);
     }
 }

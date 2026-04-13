@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.group1.grabyourgear.common.CloudinaryConfig;
 
 import java.io.File;
 import java.io.InputStream;
@@ -27,9 +28,9 @@ public class CloudinaryUploader {
         this.launcher = launcher;
 
         cloudinary = new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "dhhjxytms",
-                "api_key", "388731656932384",
-                "api_secret", "FbAinIJZRLspC8CSeWrTNLR5zYU"
+                "cloud_name", CloudinaryConfig.CLOUD_NAME,
+                "api_key", CloudinaryConfig.API_KEY,
+                "api_secret", CloudinaryConfig.API_SECRET
         ));
     }
 
