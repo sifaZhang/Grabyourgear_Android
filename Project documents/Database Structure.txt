@@ -1,0 +1,83 @@
+{
+  "users": {
+    "uid123": {
+      "username": "john123",
+      "name": "John Doe",
+      "email": "john@gmail.com",
+      "role": "customer",
+      "phone": "0211234567",
+      "address": "Auckland",
+      "avatar": "https://cloudinary.com/.../avatar.jpg",
+      "isApproved": true
+    },
+    "uidSupplier01": {
+      "username": "outdoorNZ",
+      "name": "Outdoor Gear Ltd",
+      "email": "supplier@gmail.com",
+      "role": "supplier",
+      "phone": "021987654",
+      "address": "Wellington",
+      "avatar": "",
+      "isApproved": false
+    }
+  },
+
+  "equipment": {
+    "eq001": {
+      "name": "Camping Tent",
+      "categoryId": "cat01",
+      "supplierId": "uidSupplier01",
+      "pricePerDay": 20,
+      "description": "2-person waterproof tent",
+      "imageUrl": "https://cloudinary.com/.../tent.jpg",
+      "location": "Auckland",
+      "rating": 4.5,
+      "status": "available"
+    }
+  },
+
+  "bookings": {
+    "booking001": {
+      "equipmentId": "eq001",
+      "userId": "uid123",
+      "supplierId": "uidSupplier01",
+      "startDate": "2024-05-01",
+      "endDate": "2024-05-05",
+      "totalPrice": 80,
+      "status": "pending",
+      "timestamp": 1712980000
+    }
+  },
+
+  "categories": {
+    "cat01": { "name": "Camping" },
+    "cat02": { "name": "Gardening" },
+    "cat03": { "name": "Construction" }
+  },
+
+  "faq": {
+    "faq01": {
+      "question": "How can I reset my password?",
+      "answer": "Go to Account Settings and choose Reset Password."
+    }
+  },
+
+  "inquiries": {
+    "inq001": {
+      "userId": "uid123",
+      "message": "Do you have tents for 6 people?",
+      "timestamp": 1712985000,
+      "isReplied": false
+    }
+  },
+
+  "feedback": {
+    "fb001": {
+      "userId": "uid123",
+      "equipmentId": "eq001",
+      "rating": 5,
+      "comment": "Great tent!",
+      "timestamp": 1712986000
+    }
+  }
+}
