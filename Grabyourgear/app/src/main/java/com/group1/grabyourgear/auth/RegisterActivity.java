@@ -69,7 +69,7 @@ public class RegisterActivity extends BaseActivity {
                 String address = etAddress.getText().toString().trim();
                 String username = etUsername.getText().toString().trim();
                 String sysRole = convertRole(UIRole);
-                boolean isApproved = needApproved(sysRole);
+                boolean isApproved = isApproved(sysRole);
 
                 // basic check
                 if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
@@ -157,7 +157,7 @@ public class RegisterActivity extends BaseActivity {
         }
     }
 
-    private boolean needApproved(String role) {
-        return !role.equals(AppConstants.Role.CUSTOMER);
+    private boolean isApproved(String role) {
+        return role.equals(AppConstants.Role.CUSTOMER);
     }
 }
