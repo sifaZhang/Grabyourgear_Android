@@ -56,6 +56,9 @@ public class RegisterActivity extends BaseActivity {
         spRole = findViewById(R.id.spRole);
         tvLogin = findViewById(R.id.tvLogin);
 
+        imgAvatar.setVisibility(View.INVISIBLE);
+        imgLogo.setVisibility(View.INVISIBLE);
+
         tvLogin.setText(Html.fromHtml("Already have an account? <u>Login</u>",
                 Html.FROM_HTML_MODE_LEGACY));
 
