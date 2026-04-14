@@ -28,6 +28,7 @@
       "categoryId": "cat01",
       "supplierId": "uidSupplier01",
       "pricePerDay": 20,
+      "discount": 20,
       "description": "2-person waterproof tent",
       "imageUrl": "https://cloudinary.com/.../tent.jpg",
       "location": "Auckland",
