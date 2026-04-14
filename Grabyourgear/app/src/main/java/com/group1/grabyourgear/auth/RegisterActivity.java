@@ -3,7 +3,6 @@ package com.group1.grabyourgear.auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.models.Users;
@@ -29,10 +27,10 @@ import java.util.List;
 
 public class RegisterActivity extends BaseActivity {
 
-    EditText etName, etUsername, etEmail, etPassword, etRePassword, etPhone, etAddress;
-    Spinner spRole;
-    Button btnRegister;
-    TextView tvLogin;
+    private EditText etName, etUsername, etEmail, etPassword, etRePassword, etPhone, etAddress;
+    private Spinner spRole;
+    private Button btnRegister;
+    private TextView tvLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +83,8 @@ public class RegisterActivity extends BaseActivity {
                 boolean isApproved = isApproved(role);
 
                 // basic check
-                if (fullName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()
+                        || role.isEmpty() || phone.isEmpty() || address.isEmpty() || fullName.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -102,45 +101,36 @@ public class RegisterActivity extends BaseActivity {
                     return;
                 }
 
+                Users user = new Users(
+                        null,       // uid 由 FirebaseAuth 创建后再写入
+                        fullName,
+                        username,
+                        email,
+                        phone,
+                        address,
+                        role,
+                        "",
+                        isApproved
+                );
+
                 //save to database
-                FirebaseAuth.getInstance()
-                        .createUserWithEmailAndPassword(email, password)
-                        .addOnSuccessListener(authResult -> {
+                FirebaseHelper_Users.registerUserWithAuth(
+                        email,
+                        password,
+                        user,
+                        new FirebaseHelper_Users.RegisterCallback() {
+                            @Override
+                            public void onSuccess() {
+                                Toast.makeText(RegisterActivity.this, "Register success", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
 
-                            String uid = authResult.getUser().getUid();
-
-                            Users user = new Users(
-                                    uid,
-                                    fullName,
-                                    username,
-                                    email,
-                                    phone,
-                                    address,
-                                    role,
-                                    "",
-                                    isApproved
-                            );
-
-                            FirebaseHelper_Users.registerUser(user, new FirebaseHelper_Users.RegisterCallback() {
-                                @Override
-                                public void onSuccess() {
-                                    Toast.makeText(RegisterActivity.this, "Register success", Toast.LENGTH_SHORT).show();
-
-                                    //go to login
-                                    finish();
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-                                    Toast.makeText(RegisterActivity.this, "DB Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                        })
-                        .addOnFailureListener(e -> {
-                            Log.e("Register", "Auth error: " + e.getMessage(), e);
-                            Toast.makeText(RegisterActivity.this, "Auth Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        });
+                            @Override
+                            public void onFailure(Exception e) {
+                                Toast.makeText(RegisterActivity.this, "Register failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
             }
         });
 

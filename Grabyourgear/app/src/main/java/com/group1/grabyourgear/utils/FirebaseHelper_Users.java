@@ -1,9 +1,15 @@
 package com.group1.grabyourgear.utils;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Users;
+
+import java.util.Map;
 
 public class FirebaseHelper_Users {
 
@@ -25,6 +31,11 @@ public class FirebaseHelper_Users {
 
 
 
+
+
+    // -----------------------------
+    // Register user
+    // -----------------------------
     // write users
     public interface RegisterCallback {
         void onSuccess();
@@ -41,5 +52,97 @@ public class FirebaseHelper_Users {
                 .setValue(user)
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
                 .addOnFailureListener(callback::onFailure);
+    }
+
+    // -----------------------------
+    // Register user (Auth + DB)
+    // -----------------------------
+    public static void registerUserWithAuth(
+            String email,
+            String password,
+            Users user,
+            RegisterCallback callback
+    ) {
+        FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+
+                    String uid = authResult.getUser().getUid();
+                    user.uid = uid; // 确保 UID 写入 Users 对象
+
+                    USERS_REF.child(uid)
+                            .setValue(user)
+                            .addOnSuccessListener(aVoid -> callback.onSuccess())
+                            .addOnFailureListener(callback::onFailure);
+
+                })
+                .addOnFailureListener(callback::onFailure);
+    }
+
+
+
+
+
+
+// -----------------------------
+    // Update user info (Realtime DB)
+    // -----------------------------
+    public interface UpdateCallback {
+        void onSuccess();
+        void onFailure(Exception e);
+    }
+
+    public static void updateUserProfile(String uid, Map<String, Object> updates, UpdateCallback callback) {
+        USERS_REF.child(uid)
+                .updateChildren(updates)
+                .addOnSuccessListener(aVoid -> callback.onSuccess())
+                .addOnFailureListener(callback::onFailure);
+    }
+
+    // -----------------------------
+    // Combined update (DB + password)
+    // -----------------------------
+    public static void updateUser(
+            String uid,
+            Map<String, Object> updates,
+            String oldPassword,
+            String newPassword,
+            UpdateCallback callback
+    ) {
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser == null) {
+            return;
+        }
+
+        // Step 1: update database
+        updateUserProfile(uid, updates, new UpdateCallback() {
+            @Override
+            public void onSuccess() {
+
+                // Step 2: update password (if provided)
+                if (newPassword != null && !newPassword.isEmpty()) {
+                    AuthCredential credential = EmailAuthProvider.getCredential(
+                            currentUser.getEmail(),
+                            oldPassword
+                    );
+
+                    currentUser.reauthenticate(credential)
+                            .addOnSuccessListener(aVoid -> {
+                                currentUser.updatePassword(newPassword)
+                                        .addOnSuccessListener(v -> {callback.onSuccess();})
+                                        .addOnFailureListener(e -> {callback.onFailure(e);});
+                            })
+                            .addOnFailureListener(e -> {callback.onFailure(e);});
+                } else {
+                    callback.onSuccess();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                callback.onFailure(e);
+            }
+        });
     }
 }

@@ -1,7 +1,6 @@
 package com.group1.grabyourgear.auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,14 +22,11 @@ import com.group1.grabyourgear.utils.FirebaseHelper_Users;
 import com.group1.grabyourgear.utils.UserManager;
 import com.group1.grabyourgear.utils.UserPrefs;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class LoginActivity extends BaseActivity {
 
-    Button btLogin;
-    EditText etEmail, etPassword;
-    TextView tvRegister;
+    private Button btLogin;
+    private EditText etEmail, etPassword;
+    private TextView tvRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +45,8 @@ public class LoginActivity extends BaseActivity {
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         tvRegister = findViewById(R.id.tvLogin);
+
+        imgAvatar.setVisibility(View.INVISIBLE);
 
         tvRegister.setText(Html.fromHtml("Don't have an account? <u>Register</u>",
                 Html.FROM_HTML_MODE_LEGACY));

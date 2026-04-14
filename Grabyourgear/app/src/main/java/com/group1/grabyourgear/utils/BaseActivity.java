@@ -132,24 +132,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         popup.show();
     }
 
-
     private void loadUserAvatar() {
-        UserPrefs prefs = new UserPrefs(this);
-        if (!prefs.isLoggedIn())return;
+        Users user = UserManager.getInstance().getUser();
+        if(user == null || user.avatar == null || user.avatar.isEmpty())
+            return;
 
-        DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("users")
-                .child(prefs.getUid());
-
-        ref.child("avatar").get().addOnSuccessListener(snapshot -> {
-            String url = snapshot.getValue(String.class);
-            if (url != null && !url.isEmpty()) {
-                Glide.with(this)
-                        .load(url)
-                        .placeholder(R.drawable.placeholder_avatar)
-                        .into(imgAvatar);
-            }
-        });
+        Glide.with(this)
+                .load(user.avatar)
+                .placeholder(R.drawable.placeholder_avatar)
+                .into(imgAvatar);
     }
 
     protected void setHeaderTitle(String title) {
