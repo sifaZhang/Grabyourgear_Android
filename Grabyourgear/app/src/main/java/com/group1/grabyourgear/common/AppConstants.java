@@ -2,6 +2,8 @@ package com.group1.grabyourgear.common;
 
 public class AppConstants {
 
+    public static String BK_COLOR = "#E7EFE6";
+
     // SharedPreferences
     public static class PrefUser {
         public static final String PREF_NAME = "GrabYourGearPrefs";
