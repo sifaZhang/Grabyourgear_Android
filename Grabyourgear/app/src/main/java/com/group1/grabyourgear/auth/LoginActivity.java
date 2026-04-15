@@ -46,8 +46,8 @@ public class LoginActivity extends BaseActivity {
         etPassword = findViewById(R.id.etPassword);
         tvRegister = findViewById(R.id.tvLogin);
 
-        imgAvatar.setVisibility(View.INVISIBLE);
-        imgLogo.setVisibility(View.INVISIBLE);
+        imgHeaderAvatar.setVisibility(View.INVISIBLE);
+        imgHeaderLogo.setVisibility(View.INVISIBLE);
 
         tvRegister.setText(Html.fromHtml("Don't have an account? <u>Register</u>",
                 Html.FROM_HTML_MODE_LEGACY));

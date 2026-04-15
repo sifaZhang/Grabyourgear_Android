@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Category;
 import com.group1.grabyourgear.models.Equipment;
@@ -108,7 +109,7 @@ public class CustomerDashboardActivity extends BaseActivity {
                 if (!keyword.isEmpty()) {
 
                     Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                    intent.putExtra("searchString", keyword);
+                    intent.putExtra(AppConstants.IntenParamer.SEARCH_STRING, keyword);
                     startActivity(intent);
                 }
 
@@ -121,7 +122,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra("category", tvOffice.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvOffice.getText().toString().toLowerCase());
                 startActivity(intent);
             }
         });
@@ -130,7 +131,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra("category", tvElectronics.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvElectronics.getText().toString().toLowerCase());
                 startActivity(intent);
             }
         });
@@ -139,7 +140,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra("category", tvConstruction.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvConstruction.getText().toString().toLowerCase());
                 startActivity(intent);
             }
         });
@@ -148,7 +149,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra("category", tvVehicles.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvVehicles.getText().toString().toLowerCase());
                 startActivity(intent);
             }
         });

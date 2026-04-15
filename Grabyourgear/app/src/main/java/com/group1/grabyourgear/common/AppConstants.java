@@ -4,6 +4,12 @@ public class AppConstants {
 
     public static String BK_COLOR = "#E7EFE6";
 
+    public static class IntenParamer {
+        public static final String SEARCH_STRING = "searchString";
+        public static final String CATEGORY = "GrabYourGearPrefs";
+        public static final String EQUIPMENT_ID = "equipmentId";
+    }
+
     // SharedPreferences
     public static class PrefUser {
         public static final String PREF_NAME = "GrabYourGearPrefs";

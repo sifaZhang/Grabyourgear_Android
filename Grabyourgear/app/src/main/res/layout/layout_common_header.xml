@@ -5,7 +5,7 @@
 
     <!-- logo -->
     <ImageView
-        android:id="@+id/imgLogo"
+        android:id="@+id/imgHeaderLogo"
         android:layout_width="56dp"
         android:layout_height="50dp"
         android:src="@drawable/logo"
@@ -15,7 +15,7 @@
 
     <!-- title -->
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvHeaderTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="GrabYourGear"
@@ -37,7 +37,7 @@
         android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/tvUsername"
+            android:id="@+id/tvHeaderUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
@@ -45,7 +45,7 @@
             android:layout_marginEnd="6dp"/>
 
         <ImageView
-            android:id="@+id/imgAvatar"
+            android:id="@+id/imgHeaderAvatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/placeholder_avatar"

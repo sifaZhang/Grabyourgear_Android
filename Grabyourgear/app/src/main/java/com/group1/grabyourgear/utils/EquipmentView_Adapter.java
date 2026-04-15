@@ -14,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.customer.CustomerEquipmentDetailActivity;
 import com.group1.grabyourgear.models.Equipment;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class EquipmentView_Adapter extends RecyclerView.Adapter<EquipmentView_Adapter.EquipmentViewHolder> {
@@ -40,12 +42,13 @@ public class EquipmentView_Adapter extends RecyclerView.Adapter<EquipmentView_Ad
         public void onBindViewHolder(@NonNull EquipmentViewHolder holder, int position) {
             Equipment item = equipmentList.get(position);
 
+            DecimalFormat df = new DecimalFormat("0.00");
             holder.tvTitle.setText(item.getName());
             holder.tvCategory.setText(CategoryRepository.getInstance().getCategoryName(item.getCategoryId()));
             holder.tvRating.setText(Html.fromHtml("<b>Rating:</b> " + item.getRating(), Html.FROM_HTML_MODE_LEGACY));
             holder.tvLocation.setText(Html.fromHtml("<b>Location:</b> " + item.getLocation(), Html.FROM_HTML_MODE_LEGACY));
-            holder.tvPrice.setText(Html.fromHtml("<b>Price:</b> $" + item.getPricePerDay() + "/day", Html.FROM_HTML_MODE_LEGACY));
-            holder.tvDiscount.setText(Html.fromHtml("<b>Discount:</b> " + item.getDiscount() + "%", Html.FROM_HTML_MODE_LEGACY));
+            holder.tvPrice.setText(Html.fromHtml("<b>Price:</b> $" + df.format(item.getPricePerDay()) + " / day", Html.FROM_HTML_MODE_LEGACY));
+            holder.tvDiscount.setText(Html.fromHtml("<b>Discount:</b> " + Math.round(item.getDiscount()) + "% OFF", Html.FROM_HTML_MODE_LEGACY));
 
             // Load image
             Glide.with(context)
@@ -56,7 +59,7 @@ public class EquipmentView_Adapter extends RecyclerView.Adapter<EquipmentView_Ad
             // Click event
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, CustomerEquipmentDetailActivity.class);
-                intent.putExtra("equipmentId", item.getId());
+                intent.putExtra(AppConstants.IntenParamer.EQUIPMENT_ID, item.getId());
                 context.startActivity(intent);
             });
         }

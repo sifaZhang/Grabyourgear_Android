@@ -23,5 +23,7 @@ public class CustomerMyBookingsActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        setHeaderTitle("My Bookings");
     }
 }

@@ -23,5 +23,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        setHeaderTitle("Equipments");
     }
 }

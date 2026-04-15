@@ -27,8 +27,8 @@ import com.group1.grabyourgear.supplier.SupplierDashboardActivity;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected ImageView imgAvatar, imgLogo;
-    protected TextView tvTitle, tvUsername;
+    protected ImageView imgHeaderAvatar, imgHeaderLogo;
+    protected TextView tvHeaderTitle, tvHeaderUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void setupHeader() {
-        imgAvatar = findViewById(R.id.imgAvatar);
-        tvTitle = findViewById(R.id.tvTitle);
-        imgLogo = findViewById(R.id.imgLogo);
-        tvUsername = findViewById(R.id.tvUsername);
+        imgHeaderAvatar = findViewById(R.id.imgHeaderAvatar);
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        imgHeaderLogo = findViewById(R.id.imgHeaderLogo);
+        tvHeaderUsername = findViewById(R.id.tvHeaderUsername);
 
-        if (imgAvatar == null || tvTitle == null || imgLogo == null || tvUsername == null) {
+        if (imgHeaderAvatar == null || tvHeaderTitle == null || imgHeaderLogo == null || tvHeaderUsername == null) {
             return;
         }
 
@@ -64,12 +64,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void setupUsername() {
         Users user = UserManager.getInstance().getUser();
         if (user != null) {
-            tvUsername.setText(user.getUsername());
+            tvHeaderUsername.setText(user.getUsername());
         }
     }
 
     private void setupLogoClicke() {
-        imgLogo.setOnClickListener(v -> {
+        imgHeaderLogo.setOnClickListener(v -> {
             Users user = UserManager.getInstance().getUser();
             if (user != null && user.getRole() != null) {
                 goToDashboard(user.getRole());
@@ -78,7 +78,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     private void setupAvatarClick() {
-        imgAvatar.setOnClickListener(v -> {
+        imgHeaderAvatar.setOnClickListener(v -> {
             UserPrefs prefs = new UserPrefs(this);
             if (prefs.isLoggedIn()) {
                 showAvatarMenu(v);
@@ -144,12 +144,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(user.getAvatar())
                 .placeholder(R.drawable.placeholder_avatar)
-                .into(imgAvatar);
+                .into(imgHeaderAvatar);
     }
 
     protected void setHeaderTitle(String title) {
-        if (tvTitle != null) {
-            tvTitle.setText(title);
+        if (tvHeaderTitle != null) {
+            tvHeaderTitle.setText(title);
         }
     }
 }

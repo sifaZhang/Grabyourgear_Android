@@ -112,7 +112,7 @@ public class ProfileActivity extends BaseActivity {
         Glide.with(this)
                 .load(url)
                 .placeholder(R.drawable.placeholder_avatar)
-                .into(imgAvatar);
+                .into(imgHeaderAvatar);
 
         Glide.with(this)
                 .load(url)
