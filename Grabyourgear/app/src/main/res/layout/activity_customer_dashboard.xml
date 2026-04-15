@@ -17,6 +17,127 @@
             layout="@layout/layout_common_header"
             android:id="@+id/header" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
 
+            <!-- search -->
+            <include layout="@layout/layout_common_search" />
+
+            <!-- Category -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categories"
+                style="@style/SectionTitle" />
+
+            <!-- 分类 Grid -->
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:useDefaultMargins="true">
+
+                <!-- Vehicles -->
+                <LinearLayout
+                    android:id="@+id/lyVehicles"
+                    android:layout_width="0dp"
+                    style="@style/CommonContainer">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_car"
+                        app:tint="#FF9800" />
+
+                    <TextView
+                        android:id="@+id/tvVehicles"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vehicle"
+                        style="@style/TextStyle1"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+                <!-- Construction -->
+                <LinearLayout
+                    android:id="@+id/lyConstruction"
+                    android:layout_width="0dp"
+                    style="@style/CommonContainer">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_construction"
+                        app:tint="#3F51B5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Construction"
+                        android:id="@+id/tvConstruction"
+                        style="@style/TextStyle1"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+                <!-- Electronics -->
+                <LinearLayout
+                    android:id="@+id/lyElectronics"
+                    android:layout_width="0dp"
+                    style="@style/CommonContainer">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_electronics"
+                        app:tint="#9C27B0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Electronic"
+                        style="@style/TextStyle1"
+                        android:id="@+id/tvElectronics"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+                <!-- office -->
+                <LinearLayout
+                    android:id="@+id/lyOffice"
+                    android:layout_width="0dp"
+                    style="@style/CommonContainer">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_office"
+                        app:tint="#4CAF50" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Office"
+                        android:id="@+id/tvOffice"
+                        style="@style/TextStyle1"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+            </GridLayout>
+
+            <!-- Featured Deal List -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Featured Deal List"
+                style="@style/SectionTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerDeals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"/>
+
+        </LinearLayout>
+    </LinearLayout>
 </ScrollView>

@@ -30,7 +30,7 @@ public class UserManager {
 
     public boolean isApproved() {
         if (currentUser != null)
-            return currentUser.isApproved;
+            return currentUser.isApproved();
 
         return false;
     }

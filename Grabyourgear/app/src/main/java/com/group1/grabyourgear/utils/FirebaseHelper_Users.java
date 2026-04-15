@@ -68,7 +68,7 @@ public class FirebaseHelper_Users {
                 .addOnSuccessListener(authResult -> {
 
                     String uid = authResult.getUser().getUid();
-                    user.uid = uid; // 确保 UID 写入 Users 对象
+                    user.setUid(uid); // 确保 UID 写入 Users 对象
 
                     USERS_REF.child(uid)
                             .setValue(user)

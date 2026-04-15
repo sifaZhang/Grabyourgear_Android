@@ -1,10 +1,12 @@
 package com.group1.grabyourgear.utils;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +40,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.setContentView(layoutResID);
 
         setupHeader();
-    }
 
+        View root = findViewById(android.R.id.content);
+        root.setBackgroundColor(Color.parseColor("#E7EFE6"));
+    }
 
     protected void setupHeader() {
         imgAvatar = findViewById(R.id.imgAvatar);
@@ -60,15 +64,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void setupUsername() {
         Users user = UserManager.getInstance().getUser();
         if (user != null) {
-            tvUsername.setText(user.username);
+            tvUsername.setText(user.getUsername());
         }
     }
 
     private void setupLogoClicke() {
         imgLogo.setOnClickListener(v -> {
             Users user = UserManager.getInstance().getUser();
-            if (user != null && user.role != null) {
-                goToDashboard(user.role);
+            if (user != null && user.getRole() != null) {
+                goToDashboard(user.getRole());
             }
         });
     }
@@ -134,11 +138,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private void loadUserAvatar() {
         Users user = UserManager.getInstance().getUser();
-        if(user == null || user.avatar == null || user.avatar.isEmpty())
+        if(user == null || user.getAvatar() == null || user.getAvatar().isEmpty())
             return;
 
         Glide.with(this)
-                .load(user.avatar)
+                .load(user.getAvatar())
                 .placeholder(R.drawable.placeholder_avatar)
                 .into(imgAvatar);
     }

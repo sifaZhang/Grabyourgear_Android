@@ -85,12 +85,12 @@ public class LoginActivity extends BaseActivity {
                                     public void onSuccess(Users user) {
                                         // 保存用户资料
                                         UserPrefs prefs = new UserPrefs(LoginActivity.this);
-                                        prefs.saveLogin(user.uid);
+                                        prefs.saveLogin(user.getUid());
                                         UserManager.getInstance().setUser(user);
 
                                         Toast.makeText(LoginActivity.this, "Login success", Toast.LENGTH_SHORT).show();
 
-                                        goToDashboard(user.role);
+                                        goToDashboard(user.getRole());
                                     }
 
                                     @Override

@@ -164,11 +164,11 @@ public class ProfileActivity extends BaseActivity {
             public void onSuccess() {
                 Users user = UserManager.getInstance().getUser();
                 if (user != null) {
-                    user.name = fullName;
-                    user.username = username;
-                    user.phone = phone;
-                    user.address = address;
-                    user.avatar = strAvatarUrl;
+                    user.setName(fullName);
+                    user.setUsername(username);
+                    user.setPhone(phone);
+                    user.setAddress(address);
+                    user.setAvatar(strAvatarUrl);
                     UserManager.getInstance().setUser(user);
                     etOldPassword.setText("");
                     etNewPassword.setText("");
@@ -193,20 +193,20 @@ public class ProfileActivity extends BaseActivity {
 
     private void loadUserProfile() {
         Users user = UserManager.getInstance().getUser();
-        if(user == null || user.uid.isEmpty()) {
+        if(user == null || user.getUid().isEmpty()) {
             Toast.makeText(this, "User is null", Toast.LENGTH_SHORT).show();
         } else {
-            etName.setText(user.name);
-            etUsername.setText(user.username);
-            etEmail.setText(user.email);
-            etPhone.setText(user.phone);
-            etAddress.setText(user.address);
-            etRole.setText(user.role);
-            strAvatarUrl = user.avatar;
-            strUserUID = user.uid;
+            etName.setText(user.getName());
+            etUsername.setText(user.getUsername());
+            etEmail.setText(user.getEmail());
+            etPhone.setText(user.getPhone());
+            etAddress.setText(user.getAddress());
+            etRole.setText(user.getRole());
+            strAvatarUrl = user.getAvatar();
+            strUserUID = user.getUid();
 
-            if (user.avatar != null && !user.avatar.isEmpty()) {
-                showImage(user.avatar);
+            if (user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                showImage(user.getAvatar());
             }
         }
     }

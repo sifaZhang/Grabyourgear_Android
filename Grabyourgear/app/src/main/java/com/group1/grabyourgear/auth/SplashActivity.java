@@ -49,7 +49,7 @@ public class SplashActivity extends BaseActivity {
                 @Override
                 public void onSuccess(Users user) {
                     UserManager.getInstance().setUser(user);
-                    goToDashboard(user.role);
+                    goToDashboard(user.getRole());
                 }
 
                 @Override
@@ -59,7 +59,7 @@ public class SplashActivity extends BaseActivity {
             });
         }
         else {
-            goToDashboard(currentUser.role);
+            goToDashboard(currentUser.getRole());
         }
     }
 
