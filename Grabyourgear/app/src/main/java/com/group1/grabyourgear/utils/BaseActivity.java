@@ -42,7 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setupHeader();
 
         View root = findViewById(android.R.id.content);
-        root.setBackgroundColor(Color.parseColor("#E7EFE6"));
+        root.setBackgroundColor(Color.parseColor(AppConstants.BK_COLOR));
     }
 
     protected void setupHeader() {
