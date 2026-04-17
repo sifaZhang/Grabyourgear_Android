@@ -157,34 +157,26 @@ public class CustomerEquipmentListActivity extends BaseActivity {
     }
 
     private void fillDateControl() {
-        MaterialDatePicker.Builder<Pair<Long, Long>> builder =
-                MaterialDatePicker.Builder.dateRangePicker();
-        builder.setTitleText(dateDefault);
+        tvDateRange.setOnClickListener(v -> showDateRangePicker());
+    }
 
-        MaterialDatePicker<Pair<Long, Long>> dateRangePicker = builder.build();
+    private void showDateRangePicker() {
+        MaterialDatePicker<Pair<Long, Long>> picker =
+                MaterialDatePicker.Builder.dateRangePicker()
+                        .setTitleText(dateDefault)
+                        .build();
 
-        tvDateRange.setOnClickListener(v -> {
-            dateRangePicker.show(getSupportFragmentManager(), "date_range");
-
-            // Fix dialog overlapping status bar
-            if (dateRangePicker.getDialog() != null &&
-                    dateRangePicker.getDialog().getWindow() != null) {
-                dateRangePicker.getDialog().getWindow()
-                        .setDecorFitsSystemWindows(true);
-            }
-        });
-
-
-        dateRangePicker.addOnPositiveButtonClickListener(selection -> {
+        picker.addOnPositiveButtonClickListener(selection -> {
             startDate = selection.first;
             endDate = selection.second;
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-            String result = "from " + sdf.format(new Date(startDate)) + " to " + sdf.format(new Date(endDate));
+            String result = "from " + sdf.format(new Date(startDate))
+                    + " to " + sdf.format(new Date(endDate));
             tvDateRange.setText(result);
-
         });
+
+        picker.show(getSupportFragmentManager(), "date_range");
     }
 
     private void resetSearch() {
