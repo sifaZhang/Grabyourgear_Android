@@ -1,17 +1,50 @@
 package com.group1.grabyourgear.customer;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.AppConstants;
+import com.group1.grabyourgear.common.FirebaseNodes;
+import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.utils.BaseActivity;
+import com.group1.grabyourgear.utils.CategoryRepository;
+import com.group1.grabyourgear.utils.EquipmentRepository;
+import com.group1.grabyourgear.utils.EquipmentView_Adapter;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+import androidx.core.util.Pair;
 
 public class CustomerEquipmentListActivity extends BaseActivity {
+    Button btnSearch, btnClear;
+    EditText etLocation, etKeyword;
+    Spinner spCategory;
+    TextView tvDateRange;
+    RecyclerView recyclerDeals;
+    Long startDate, endDate;
+
+    String dateDefault = "Select Date Range";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,5 +58,152 @@ public class CustomerEquipmentListActivity extends BaseActivity {
         });
 
         setHeaderTitle("Equipments");
+
+        tvDateRange = findViewById(R.id.tvDateRange);
+        btnClear = findViewById(R.id.btnClear);
+        btnSearch = findViewById(R.id.btnSearch);
+        etLocation = findViewById(R.id.etLocation);
+        etKeyword = findViewById(R.id.etKeyword);
+        spCategory = findViewById(R.id.spCategory);
+        recyclerDeals = findViewById(R.id.recyclerDeals);
+
+        recyclerDeals.setLayoutManager(new LinearLayoutManager(this));
+
+        fillCategory();
+        fillDateControl();
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                resetSearch();
+            }
+        });
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchEquipment();
+            }
+        });
+
+        SearchByIntentParameter();
+    }
+
+    private void SearchByIntentParameter(){
+        String selectedCategory = getIntent().getStringExtra(AppConstants.IntenParamer.CATEGORY);
+
+        if (selectedCategory != null) {
+            int pos = ((ArrayAdapter<String>) spCategory.getAdapter()).getPosition(selectedCategory);
+            if (pos >= 0) {
+                spCategory.setSelection(pos);
+            }
+        } else {
+            spCategory.setSelection(0); // 默认 ALL
+        }
+
+        String keyword = getIntent().getStringExtra(AppConstants.IntenParamer.SEARCH_STRING);
+        if (keyword != null) {
+            etKeyword.setText(keyword);
+        }
+
+        searchEquipment();
+    }
+
+    private void searchEquipment() {
+        String location = etLocation.getText().toString().toLowerCase();
+        String keyword = etKeyword.getText().toString().toLowerCase();
+        String dateRange = tvDateRange.getText().toString();
+
+        // 1. 安全获取 category
+        Object selectedObj = spCategory.getSelectedItem();
+        String selectedCategory = selectedObj == null
+                ? AppConstants.CurrentCategory.ALL
+                : selectedObj.toString().toLowerCase();
+
+        // 2. 获取缓存的设备列表
+        List<Equipment> equipmentList = EquipmentRepository.getInstance().getCachedEquipment();
+        if (equipmentList == null) equipmentList = new ArrayList<>();
+
+        // 3. 过滤
+        List<Equipment> filteredList = equipmentList.stream()
+                .filter(e -> {
+                    String categoryName = CategoryRepository.getInstance().getCategoryName(e.getCategoryId());
+                    if (!selectedCategory.equals(AppConstants.CurrentCategory.ALL.toLowerCase())) {
+                        return selectedCategory.equals(categoryName);
+                    }
+                    return true;
+                })
+                .filter(e -> {
+                    String name = e.getName() == null ? "" : e.getName().toLowerCase();
+                    String desc = e.getDescription() == null ? "" : e.getDescription().toLowerCase();
+                    return keyword.isEmpty() || desc.contains(keyword) || desc.contains(keyword);
+                })
+                .filter(e -> {
+                    String loc = e.getLocation() == null ? "" : e.getLocation().toLowerCase();
+                    return location.isEmpty() || loc.contains(location);
+                })
+                .filter(e -> FirebaseNodes.EquipmentStatus.AVAILABLE.equals(e.getStatus()))
+                .collect(Collectors.toList());
+
+        //todo filter by date from booking table
+        if ( !tvDateRange.getText().toString().equals(dateDefault)){
+            //startDate;
+            //endDate;
+        }
+
+        // 5. 显示
+        EquipmentView_Adapter adapter = new EquipmentView_Adapter(this, filteredList);
+        recyclerDeals.setAdapter(adapter);
+    }
+
+    private void fillDateControl() {
+        MaterialDatePicker.Builder<Pair<Long, Long>> builder =
+                MaterialDatePicker.Builder.dateRangePicker();
+        builder.setTitleText(dateDefault);
+
+        MaterialDatePicker<Pair<Long, Long>> dateRangePicker = builder.build();
+
+        tvDateRange.setOnClickListener(v -> {
+            dateRangePicker.show(getSupportFragmentManager(), "date_range");
+
+            // Fix dialog overlapping status bar
+            if (dateRangePicker.getDialog() != null &&
+                    dateRangePicker.getDialog().getWindow() != null) {
+                dateRangePicker.getDialog().getWindow()
+                        .setDecorFitsSystemWindows(true);
+            }
+        });
+
+
+        dateRangePicker.addOnPositiveButtonClickListener(selection -> {
+            startDate = selection.first;
+            endDate = selection.second;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+            String result = "from " + sdf.format(new Date(startDate)) + " to " + sdf.format(new Date(endDate));
+            tvDateRange.setText(result);
+
+        });
+    }
+
+    private void resetSearch() {
+        spCategory.setSelection(0);
+        etLocation.setText("");
+        etKeyword.setText("");
+        tvDateRange.setText(dateDefault);
+    }
+
+    private void fillCategory()
+    {
+        List<String> category = Arrays.asList(AppConstants.CurrentCategory.ALL, AppConstants.CurrentCategory.CONSTRUCTION, AppConstants.CurrentCategory.ELECTRONIC, AppConstants.CurrentCategory.OFFICE, AppConstants.CurrentCategory.VEHICLE);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                category
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCategory.setAdapter(adapter);
+        spCategory.setSelection(0);
     }
 }

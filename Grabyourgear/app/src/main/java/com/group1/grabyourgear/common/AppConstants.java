@@ -27,4 +27,12 @@ public class AppConstants {
         public static final String SERVICE = "service";
     }
 
+    //category
+    public static class CurrentCategory {
+        public static final String ALL = "All";
+        public static final String VEHICLE = "Vehicle";
+        public static final String CONSTRUCTION = "Construction";
+        public static final String ELECTRONIC = "Electronic";
+        public static final String OFFICE = "Office";
+    }
 }

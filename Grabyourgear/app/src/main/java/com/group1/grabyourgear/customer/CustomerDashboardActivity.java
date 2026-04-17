@@ -122,7 +122,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvOffice.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvOffice.getText().toString());
                 startActivity(intent);
             }
         });
@@ -131,7 +131,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvElectronics.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvElectronics.getText().toString());
                 startActivity(intent);
             }
         });
@@ -140,7 +140,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvConstruction.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvConstruction.getText().toString());
                 startActivity(intent);
             }
         });
@@ -149,7 +149,7 @@ public class CustomerDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CustomerDashboardActivity.this, CustomerEquipmentListActivity.class);
-                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvVehicles.getText().toString().toLowerCase());
+                intent.putExtra(AppConstants.IntenParamer.CATEGORY, tvVehicles.getText().toString());
                 startActivity(intent);
             }
         });
