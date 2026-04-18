@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,6 +26,7 @@ import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.CategoryRepository;
 import com.group1.grabyourgear.utils.EquipmentRepository;
 import com.group1.grabyourgear.utils.EquipmentView_Adapter;
+import com.group1.grabyourgear.utils.FirebaseHelper_Equipment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -110,50 +112,66 @@ public class CustomerEquipmentListActivity extends BaseActivity {
     }
 
     private void searchEquipment() {
+        // 0. get conditiony
         String location = etLocation.getText().toString().toLowerCase();
         String keyword = etKeyword.getText().toString().toLowerCase();
         String dateRange = tvDateRange.getText().toString();
 
-        // 1. 安全获取 category
+        //category
         Object selectedObj = spCategory.getSelectedItem();
         String selectedCategory = selectedObj == null
                 ? AppConstants.CurrentCategory.ALL
                 : selectedObj.toString().toLowerCase();
 
-        // 2. 获取缓存的设备列表
-        List<Equipment> equipmentList = EquipmentRepository.getInstance().getCachedEquipment();
-        if (equipmentList == null) equipmentList = new ArrayList<>();
+        // 1. refresh equiments
+        FirebaseHelper_Equipment.loadAllEquipment(new FirebaseHelper_Equipment.EquipmentListCallback() {
+            @Override
+            public void onSuccess(List<Equipment> equipmentList) {
+                EquipmentRepository.getInstance().clearCachedEquipment();
+                EquipmentRepository.getInstance().setCachedEquipment(equipmentList);
 
-        // 3. 过滤
-        List<Equipment> filteredList = equipmentList.stream()
-                .filter(e -> {
-                    String categoryName = CategoryRepository.getInstance().getCategoryName(e.getCategoryId());
-                    if (!selectedCategory.equals(AppConstants.CurrentCategory.ALL.toLowerCase())) {
-                        return selectedCategory.equals(categoryName);
-                    }
-                    return true;
-                })
-                .filter(e -> {
-                    String name = e.getName() == null ? "" : e.getName().toLowerCase();
-                    String desc = e.getDescription() == null ? "" : e.getDescription().toLowerCase();
-                    return keyword.isEmpty() || desc.contains(keyword) || desc.contains(keyword);
-                })
-                .filter(e -> {
-                    String loc = e.getLocation() == null ? "" : e.getLocation().toLowerCase();
-                    return location.isEmpty() || loc.contains(location);
-                })
-                .filter(e -> FirebaseNodes.EquipmentStatus.AVAILABLE.equals(e.getStatus()))
-                .collect(Collectors.toList());
+                // 2. 获取缓存的设备列表
+                if (equipmentList == null) {
+                    return;
+                }
 
-        //todo filter by date from booking table
-        if ( !tvDateRange.getText().toString().equals(dateDefault)){
-            //startDate;
-            //endDate;
-        }
+                // 3. 过滤
+                List<Equipment> filteredList = equipmentList.stream()
+                        .filter(e -> {
+                            String categoryName = CategoryRepository.getInstance().getCategoryName(e.getCategoryId());
+                            if (!selectedCategory.equals(AppConstants.CurrentCategory.ALL.toLowerCase())) {
+                                return selectedCategory.equals(categoryName);
+                            }
+                            return true;
+                        })
+                        .filter(e -> {
+                            String name = e.getName() == null ? "" : e.getName().toLowerCase();
+                            String desc = e.getDescription() == null ? "" : e.getDescription().toLowerCase();
+                            return keyword.isEmpty() || desc.contains(keyword) || desc.contains(keyword);
+                        })
+                        .filter(e -> {
+                            String loc = e.getLocation() == null ? "" : e.getLocation().toLowerCase();
+                            return location.isEmpty() || loc.contains(location);
+                        })
+                        .filter(e -> FirebaseNodes.EquipmentStatus.AVAILABLE.equals(e.getStatus()))
+                        .collect(Collectors.toList());
 
-        // 5. 显示
-        EquipmentView_Adapter adapter = new EquipmentView_Adapter(this, filteredList);
-        recyclerDeals.setAdapter(adapter);
+                //todo filter by date from booking table
+                if ( !tvDateRange.getText().toString().equals(dateDefault)){
+                    //startDate;
+                    //endDate;
+                }
+
+                // 5. 显示
+                EquipmentView_Adapter adapter = new EquipmentView_Adapter(CustomerEquipmentListActivity.this, filteredList);
+                recyclerDeals.setAdapter(adapter);
+            }
+            @Override
+            public void onFailure(Exception e) {
+                e.printStackTrace();
+                Toast.makeText(CustomerEquipmentListActivity.this, "Failed," + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fillDateControl() {
