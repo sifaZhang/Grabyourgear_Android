@@ -13,6 +13,7 @@ public class Equipment {
     private String location;
     private double rating;
     private String status;
+    private boolean isLocked;
 
     // Empty constructor (required for Firestore)
     public Equipment() {}
@@ -20,7 +21,8 @@ public class Equipment {
     // Full constructor
     public Equipment(String id, String name, String categoryId, String supplierId,
                      double pricePerDay, double discount, String description,
-                     String imageUrl, String location, double rating, String status) {
+                     String imageUrl, String location, double rating, String status,
+                     boolean isLocked) {
         this.id = id;
         this.name = name;
         this.categoryId = categoryId;
@@ -32,6 +34,7 @@ public class Equipment {
         this.location = location;
         this.rating = rating;
         this.status = status;
+        this.isLocked = isLocked;
     }
 
     // Getters and Setters
@@ -67,5 +70,8 @@ public class Equipment {
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+
+    public boolean isLocked() { return isLocked; }
+    public void setLocked(boolean locked) { isLocked = locked; }
 }
 

@@ -1,5 +1,9 @@
 package com.group1.grabyourgear.utils;
 
+import android.widget.Toast;
+
+import com.group1.grabyourgear.common.FirebaseNodes;
+import com.group1.grabyourgear.customer.CustomerDashboardActivity;
 import com.group1.grabyourgear.models.Equipment;
 
 import java.util.ArrayList;
