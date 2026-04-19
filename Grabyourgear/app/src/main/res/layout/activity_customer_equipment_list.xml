@@ -141,6 +141,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         style="@style/AppButtonPrimaryStyle"
+                        android:layout_marginLeft="10dp"
                         android:text="Search" />
                 </LinearLayout>
             </LinearLayout>
@@ -156,6 +157,8 @@
                 android:id="@+id/recyclerDeals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/rounded_bg"
+                android:layout_marginBottom="10dp"
                 android:nestedScrollingEnabled="false"/>
         </LinearLayout>
     </LinearLayout>

@@ -21,11 +21,13 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.common.FirebaseNodes;
+import com.group1.grabyourgear.models.Booking;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.CategoryRepository;
 import com.group1.grabyourgear.utils.EquipmentRepository;
 import com.group1.grabyourgear.utils.EquipmentView_Adapter;
+import com.group1.grabyourgear.utils.FirebaseHelper_Bookings;
 import com.group1.grabyourgear.utils.FirebaseHelper_Equipment;
 
 import java.text.SimpleDateFormat;
@@ -147,7 +149,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
                         .filter(e -> {
                             String name = e.getName() == null ? "" : e.getName().toLowerCase();
                             String desc = e.getDescription() == null ? "" : e.getDescription().toLowerCase();
-                            return keyword.isEmpty() || desc.contains(keyword) || desc.contains(keyword);
+                            return keyword.isEmpty() || name.contains(keyword) || desc.contains(keyword);
                         })
                         .filter(e -> {
                             String loc = e.getLocation() == null ? "" : e.getLocation().toLowerCase();
@@ -156,10 +158,49 @@ public class CustomerEquipmentListActivity extends BaseActivity {
                         .filter(e -> FirebaseNodes.EquipmentStatus.AVAILABLE.equals(e.getStatus()))
                         .collect(Collectors.toList());
 
-                //todo filter by date from booking table
-                if ( !tvDateRange.getText().toString().equals(dateDefault)){
-                    //startDate;
-                    //endDate;
+                //filter by date from booking table
+                String dateShow = tvDateRange.getText().toString();
+                if ( !dateShow.equals(dateDefault)){
+                    long userStart = startDate;
+                    long userEnd = endDate;
+
+                    // 先查询所有 bookings
+                    FirebaseHelper_Bookings.loadAllBookings(new FirebaseHelper_Bookings.BookingListCallback() {
+                        @Override
+                        public void onSuccess(List<Booking> bookingList) {
+                            List<Equipment> finalFiltered = new ArrayList<>();
+                            for (Equipment e : filteredList) {
+                                boolean isAvailable = true;
+                                for (Booking b : bookingList) {
+                                    if (!b.getEquipmentId().equals(e.getId())) continue;
+
+                                    long bStart = parseDate(b.getStartDate());
+                                    long bEnd = parseDate(b.getEndDate());
+
+                                    // 日期冲突判断
+                                    if (bStart <= userEnd && bEnd >= userStart) {
+                                        isAvailable = false;
+                                        break;
+                                    }
+                                }
+
+                                if (isAvailable) {
+                                    finalFiltered.add(e);
+                                }
+                            }
+
+                            //显示最终过滤结果
+                            EquipmentView_Adapter adapter = new EquipmentView_Adapter(CustomerEquipmentListActivity.this, finalFiltered);
+                            recyclerDeals.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(CustomerEquipmentListActivity.this,"Failed to load bookings: " + e.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    return; // 防止提前显示未过滤的列表
                 }
 
                 // 5. 显示
@@ -215,5 +256,14 @@ public class CustomerEquipmentListActivity extends BaseActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategory.setAdapter(adapter);
         spCategory.setSelection(0);
+    }
+
+    private long parseDate(String dateStr) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            return sdf.parse(dateStr).getTime();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }
