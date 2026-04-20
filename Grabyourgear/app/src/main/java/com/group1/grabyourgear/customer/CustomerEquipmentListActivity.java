@@ -48,8 +48,6 @@ public class CustomerEquipmentListActivity extends BaseActivity {
     RecyclerView recyclerDeals;
     Long startDate, endDate;
 
-    String dateDefault = "Select Date Range";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +70,8 @@ public class CustomerEquipmentListActivity extends BaseActivity {
         recyclerDeals = findViewById(R.id.recyclerDeals);
 
         recyclerDeals.setLayoutManager(new LinearLayoutManager(this));
+
+        tvDateRange.setText(AppConstants.DEFAULT_DATE);
 
         fillCategory();
         fillDateControl();
@@ -160,7 +160,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
 
                 //filter by date from booking table
                 String dateShow = tvDateRange.getText().toString();
-                if ( !dateShow.equals(dateDefault)){
+                if ( !dateShow.equals(AppConstants.DEFAULT_DATE)){
                     long userStart = startDate;
                     long userEnd = endDate;
 
@@ -174,8 +174,8 @@ public class CustomerEquipmentListActivity extends BaseActivity {
                                 for (Booking b : bookingList) {
                                     if (!b.getEquipmentId().equals(e.getId())) continue;
 
-                                    long bStart = parseDate(b.getStartDate());
-                                    long bEnd = parseDate(b.getEndDate());
+                                    long bStart = b.getStartDate();
+                                    long bEnd = b.getEndDate();
 
                                     // 日期冲突判断
                                     if (bStart <= userEnd && bEnd >= userStart) {
@@ -222,7 +222,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
     private void showDateRangePicker() {
         MaterialDatePicker<Pair<Long, Long>> picker =
                 MaterialDatePicker.Builder.dateRangePicker()
-                        .setTitleText(dateDefault)
+                        .setTitleText(AppConstants.DEFAULT_DATE)
                         .build();
 
         picker.addOnPositiveButtonClickListener(selection -> {
@@ -230,8 +230,8 @@ public class CustomerEquipmentListActivity extends BaseActivity {
             endDate = selection.second;
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            String result = "from " + sdf.format(new Date(startDate))
-                    + " to " + sdf.format(new Date(endDate));
+            String result = sdf.format(new Date(startDate))
+                    + " - " + sdf.format(new Date(endDate));
             tvDateRange.setText(result);
         });
 
@@ -242,7 +242,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
         spCategory.setSelection(0);
         etLocation.setText("");
         etKeyword.setText("");
-        tvDateRange.setText(dateDefault);
+        tvDateRange.setText(AppConstants.DEFAULT_DATE);
     }
 
     private void fillCategory()

@@ -5,9 +5,9 @@ public class Booking {
     private String equipmentId;
     private String userId;
     private String supplierId;
-    private String startDate;
-    private String endDate;
-    private long totalPrice;
+    private long startDate;
+    private long endDate;
+    private double totalPrice;
     private String status;
     private long timestamp;
 
@@ -16,7 +16,7 @@ public class Booking {
 
     //  全参构造函数
     public Booking(String equipmentId, String userId, String supplierId,
-                   String startDate, String endDate, long totalPrice,
+                   long startDate, long endDate, double totalPrice,
                    String status, long timestamp) {
 
         this.equipmentId = equipmentId;
@@ -54,23 +54,23 @@ public class Booking {
         this.supplierId = supplierId;
     }
 
-    public String getStartDate() {
+    public long getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(long startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(long endDate) {
         this.endDate = endDate;
     }
 
-    public long getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 

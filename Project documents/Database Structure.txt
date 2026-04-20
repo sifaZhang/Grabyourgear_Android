@@ -43,9 +43,9 @@
       "equipmentId": "eq001",
       "userId": "uid123",
       "supplierId": "uidSupplier01",
-      "startDate": "2024-05-01",
-      "endDate": "2024-05-05",
-      "totalPrice": 80,
+      "startDate": 1712980000,
+      "endDate": 1712980000,
+      "totalPrice": 80.00,
       "status": "pending",
       "timestamp": 1712980000
     }

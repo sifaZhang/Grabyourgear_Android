@@ -2,6 +2,7 @@ package com.group1.grabyourgear.utils;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -38,4 +39,34 @@ public class FirebaseHelper_Equipment {
 
         }).addOnFailureListener(callback::onFailure);
     }
+
+
+    //lock equipment
+    public static void lockEquipment(String equipmentId, Runnable onSuccess, OnFailureListener onFailure) {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("equipment")
+                .child(equipmentId)
+                .child("isLocked");
+
+        ref.setValue(true)
+                .addOnSuccessListener(aVoid -> onSuccess.run())
+                .addOnFailureListener(onFailure);
+    }
+
+    //lock equipment
+    public static void unLockEquipment(String equipmentId, Runnable onSuccess, OnFailureListener onFailure) {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("equipment")
+                .child(equipmentId)
+                .child("isLocked");
+
+        ref.setValue(false)
+                .addOnSuccessListener(aVoid -> {
+                    if (onSuccess != null) onSuccess.run();
+                })
+                .addOnFailureListener(e -> {
+                    if (onFailure != null) onFailure.onFailure(e);
+                });
+    }
+
 }

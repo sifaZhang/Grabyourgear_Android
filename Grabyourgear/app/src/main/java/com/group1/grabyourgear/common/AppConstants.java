@@ -4,10 +4,13 @@ public class AppConstants {
 
     public static String BK_COLOR = "#E7EFE6";
 
+    public static String DEFAULT_DATE = "Select Date Range";
+
     public static class IntenParamer {
         public static final String SEARCH_STRING = "searchString";
         public static final String CATEGORY = "GrabYourGearPrefs";
         public static final String EQUIPMENT_ID = "equipmentId";
+        public static final String EQUIPMENT_NAME = "equipmentName";
     }
 
     // SharedPreferences
