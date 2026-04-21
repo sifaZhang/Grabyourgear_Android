@@ -24,12 +24,21 @@ public class FirebaseHelper_Categories {
             List<Category> list = new ArrayList<>();
 
             for (DataSnapshot child : snapshot.getChildren()) {
+                Category category = null;
+                Object value = child.getValue();
 
-                // 读取 Category 对象
-                Category category = child.getValue(Category.class);
+                if (value instanceof String) {
+                    // Handle case where category is just a String name in DB
+                    category = new Category(child.getKey(), (String) value);
+                } else if (value != null) {
+                    // Handle case where category is an object in DB
+                    category = child.getValue(Category.class);
+                    if (category != null) {
+                        category.setCtId(child.getKey());
+                    }
+                }
 
                 if (category != null) {
-                    category.setCtId(child.getKey());
                     list.add(category);
                 }
             }

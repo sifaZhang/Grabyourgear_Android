@@ -1,4 +1,4 @@
-package com.yourpackage.name;
+package com.group1.grabyourgear.utils;
 
 import android.os.Parcel;
 import android.os.Parcelable;

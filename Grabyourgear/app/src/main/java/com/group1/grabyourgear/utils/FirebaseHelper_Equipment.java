@@ -44,9 +44,9 @@ public class FirebaseHelper_Equipment {
     //lock equipment
     public static void lockEquipment(String equipmentId, Runnable onSuccess, OnFailureListener onFailure) {
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("equipment")
+                .getReference(FirebaseNodes.EQUIPMENT)
                 .child(equipmentId)
-                .child("isLocked");
+                .child(FirebaseNodes.EquipmentFields.IS_LOCKED);
 
         ref.setValue(true)
                 .addOnSuccessListener(aVoid -> onSuccess.run())
@@ -56,9 +56,9 @@ public class FirebaseHelper_Equipment {
     //lock equipment
     public static void unLockEquipment(String equipmentId, Runnable onSuccess, OnFailureListener onFailure) {
         DatabaseReference ref = FirebaseDatabase.getInstance()
-                .getReference("equipment")
+                .getReference(FirebaseNodes.EQUIPMENT)
                 .child(equipmentId)
-                .child("isLocked");
+                .child(FirebaseNodes.EquipmentFields.IS_LOCKED);
 
         ref.setValue(false)
                 .addOnSuccessListener(aVoid -> {

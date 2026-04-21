@@ -5,11 +5,7 @@ plugins {
 
 android {
     namespace = "com.group1.grabyourgear"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.group1.grabyourgear"
@@ -30,6 +26,14 @@ android {
             )
         }
     }
+
+    packaging {
+        jniLibs {
+            // 关键：确保原生库不压缩并按页面对齐
+            useLegacyPackaging = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -45,7 +49,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
     implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.cloudinary:cloudinary-android:2.3.1")
+    implementation("com.cloudinary:cloudinary-android:3.1.2")
     implementation("com.google.android.material:material:1.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     testImplementation(libs.junit)

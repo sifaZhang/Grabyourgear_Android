@@ -3,6 +3,8 @@ package com.group1.grabyourgear.utils;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -21,6 +23,7 @@ import com.group1.grabyourgear.auth.LoginActivity;
 import com.group1.grabyourgear.auth.ProfileActivity;
 import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.customer.CustomerDashboardActivity;
+import com.group1.grabyourgear.customer.CustomerMyBookingsActivity;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.service.ServiceDashboardActivity;
 import com.group1.grabyourgear.supplier.SupplierDashboardActivity;
@@ -116,6 +119,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.getMenuInflater().inflate(R.menu.avatar_menu, popup.getMenu());
 
+        if(UserManager.getInstance().getUser().getRole().equals(AppConstants.Role.CUSTOMER)){
+            popup.getMenu().findItem(R.id.menu_myBookings).setVisible(true);
+        }
+        else{
+            popup.getMenu().findItem(R.id.menu_myBookings).setVisible(false);
+        }
+
         popup.setOnMenuItemClickListener(item -> {
             int id = item.getItemId();
             if (id == R.id.menu_profile) {
@@ -128,6 +138,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 startActivity(new Intent(this, LoginActivity.class));
                 finish();
                 Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if(id == R.id.menu_myBookings) {
+                startActivity(new Intent(this, CustomerMyBookingsActivity.class));
                 return true;
             }
             return false;

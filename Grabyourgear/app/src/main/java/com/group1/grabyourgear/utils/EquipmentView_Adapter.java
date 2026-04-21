@@ -22,7 +22,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class EquipmentView_Adapter extends RecyclerView.Adapter<EquipmentView_Adapter.EquipmentViewHolder> {
-
         private Context context;
         private List<Equipment> equipmentList;
 

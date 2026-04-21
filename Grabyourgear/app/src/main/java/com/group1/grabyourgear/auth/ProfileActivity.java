@@ -3,9 +3,11 @@ package com.group1.grabyourgear.auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,8 +60,34 @@ public class ProfileActivity extends BaseActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_auth_profile);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+            Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            Insets navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+
+            int bottomPadding = Math.max(imeInsets.bottom, navigationBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, bottomPadding);
+
+            // 键盘弹出时（ime bottom > 0），自动滚动到焦点 View
+            if (imeInsets.bottom > 0) {
+                View focusedView = getCurrentFocus();
+                if (focusedView != null) {
+                    ScrollView scrollView = findViewById(R.id.main);
+                    scrollView.post(() -> {
+                        // 计算 focusedView 相对于 ScrollView 的位置
+                        int[] location = new int[2];
+                        focusedView.getLocationInWindow(location);
+                        int[] scrollLocation = new int[2];
+                        scrollView.getLocationInWindow(scrollLocation);
+
+                        int scrollTo = location[1] - scrollLocation[1]
+                                + scrollView.getScrollY()
+                                - scrollView.getHeight() / 2; // 滚到屏幕中间位置
+
+                        scrollView.smoothScrollTo(0, scrollTo);
+                    });
+                }
+            }
+
             return insets;
         });
 

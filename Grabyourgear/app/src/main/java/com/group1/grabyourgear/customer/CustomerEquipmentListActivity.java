@@ -1,7 +1,9 @@
 package com.group1.grabyourgear.customer;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,6 +88,14 @@ public class CustomerEquipmentListActivity extends BaseActivity {
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // 关闭键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                View view = getCurrentFocus();
+                if (view != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
                 searchEquipment();
             }
         });

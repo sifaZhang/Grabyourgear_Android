@@ -2,6 +2,7 @@ package com.group1.grabyourgear.models;
 
 public class Booking {
 
+    private String id;
     private String equipmentId;
     private String userId;
     private String supplierId;
@@ -11,14 +12,15 @@ public class Booking {
     private String status;
     private long timestamp;
 
-    // Firebase
+    // Firebase required empty constructor
     public Booking() {}
 
-    //  全参构造函数
-    public Booking(String equipmentId, String userId, String supplierId,
+    // Full constructor (id optional depending on your usage)
+    public Booking(String id, String equipmentId, String userId, String supplierId,
                    long startDate, long endDate, double totalPrice,
                    String status, long timestamp) {
 
+        this.id = id;
         this.equipmentId = equipmentId;
         this.userId = userId;
         this.supplierId = supplierId;
@@ -29,7 +31,16 @@ public class Booking {
         this.timestamp = timestamp;
     }
 
-    // Getter & Setter
+    // Getter & Setter for id
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    // Other getters & setters
     public String getEquipmentId() {
         return equipmentId;
     }
@@ -74,7 +85,7 @@ public class Booking {
         return totalPrice;
     }
 
-    public void setTotalPrice(long totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 

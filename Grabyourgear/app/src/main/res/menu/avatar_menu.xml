@@ -5,6 +5,10 @@
         android:title="Profile" />
 
     <item
+        android:id="@+id/menu_myBookings"
+        android:title="My Bookings" />
+
+    <item
         android:id="@+id/menu_logout"
         android:title="Logout" />
 </menu>

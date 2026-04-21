@@ -1,6 +1,5 @@
 package com.group1.grabyourgear.utils;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -12,7 +11,7 @@ import java.util.List;
 
 public class FirebaseHelper_Bookings {
 
-    //////Read booking from firebase
+    ////// Read booking from firebase
     private static final DatabaseReference BOOKING_REF =
             FirebaseDatabase.getInstance().getReference(FirebaseNodes.BOOKINGS);
 
@@ -22,7 +21,7 @@ public class FirebaseHelper_Bookings {
         void onFailure(Exception e);
     }
 
-    // 1. 加载所有 bookings
+    // 1. Load all bookings
     public static void loadAllBookings(BookingListCallback callback) {
         BOOKING_REF.get().addOnSuccessListener(snapshot -> {
 
@@ -30,6 +29,7 @@ public class FirebaseHelper_Bookings {
             for (DataSnapshot child : snapshot.getChildren()) {
                 Booking item = child.getValue(Booking.class);
                 if (item != null) {
+                    item.setId(child.getKey());
                     list.add(item);
                 }
             }
@@ -39,17 +39,16 @@ public class FirebaseHelper_Bookings {
         }).addOnFailureListener(callback::onFailure);
     }
 
-    // 2. 按设备 ID 查询（用于日期过滤）
+    // 2. Load bookings by equipment ID
     public static void loadBookingsByEquipmentId(String equipmentId, BookingListCallback callback) {
-
         BOOKING_REF.get().addOnSuccessListener(snapshot -> {
 
             List<Booking> list = new ArrayList<>();
-
             for (DataSnapshot child : snapshot.getChildren()) {
                 Booking item = child.getValue(Booking.class);
 
                 if (item != null && equipmentId.equals(item.getEquipmentId())) {
+                    item.setId(child.getKey());
                     list.add(item);
                 }
             }
@@ -59,49 +58,27 @@ public class FirebaseHelper_Bookings {
         }).addOnFailureListener(callback::onFailure);
     }
 
-    // 3. 按用户 ID 查询（客户查看自己的订单）
+    // 3. Load bookings by user ID
     public static void loadBookingsByUserId(String userId, BookingListCallback callback) {
-        BOOKING_REF.orderByChild("userId")
-                .equalTo(userId)
-                .get()
-                .addOnSuccessListener(snapshot -> {
+        BOOKING_REF.get().addOnSuccessListener(snapshot -> {
 
-                    List<Booking> list = new ArrayList<>();
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Booking item = child.getValue(Booking.class);
-                        if (item != null) {
-                            list.add(item);
-                        }
-                    }
+            List<Booking> list = new ArrayList<>();
+            for (DataSnapshot child : snapshot.getChildren()) {
+                Booking item = child.getValue(Booking.class);
 
-                    callback.onSuccess(list);
+                if (item != null && userId.equals(item.getUserId())) {
+                    item.setId(child.getKey());   // <-- IMPORTANT
+                    list.add(item);
+                }
+            }
 
-                }).addOnFailureListener(callback::onFailure);
-    }
+            callback.onSuccess(list);
 
-    // 4. query by supplierID for supplier dashboard
-    public static void loadBookingsBySupplierId(String supplierId, BookingListCallback callback) {
-        BOOKING_REF.orderByChild("supplierId")
-                .equalTo(supplierId)
-                .get()
-                .addOnSuccessListener(snapshot -> {
-
-                    List<Booking> list = new ArrayList<>();
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Booking item = child.getValue(Booking.class);
-                        if (item != null) {
-                            list.add(item);
-                        }
-                    }
-
-                    callback.onSuccess(list);
-
-                }).addOnFailureListener(callback::onFailure);
+        }).addOnFailureListener(callback::onFailure);
     }
 
 
-
-    ///////Write data to firebase
+    ////// Write data to firebase
     public interface BookingCreateCallback {
         void onSuccess();
         void onFailure(Exception e);
@@ -110,6 +87,7 @@ public class FirebaseHelper_Bookings {
     public static void createBooking(Booking booking, BookingCreateCallback callback) {
 
         DatabaseReference ref = BOOKING_REF.push(); // auto ID
+        booking.setId(ref.getKey());
 
         ref.setValue(booking)
                 .addOnSuccessListener(aVoid -> callback.onSuccess())
@@ -117,4 +95,22 @@ public class FirebaseHelper_Bookings {
     }
 
 
+    ////// Update booking status
+    public interface OnBookingUpdateListener {
+        void onSuccess();
+        void onFailure(String error);
+    }
+
+    // Update Booking status
+    public static void updateBookingStatus(String bookingId, String newStatus,
+                                           OnBookingUpdateListener listener) {
+        BOOKING_REF.child(bookingId).child(FirebaseNodes.BookingsFields.STATUS)
+                .setValue(newStatus)
+                .addOnSuccessListener(aVoid -> {
+                    if (listener != null) listener.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    if (listener != null) listener.onFailure(e.getMessage());
+                });
+    }
 }

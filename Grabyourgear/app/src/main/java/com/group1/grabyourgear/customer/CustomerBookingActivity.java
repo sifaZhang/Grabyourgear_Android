@@ -22,10 +22,12 @@ import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.AppConstants;
+import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Booking;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.utils.BaseActivity;
+import com.group1.grabyourgear.utils.DisabledDatesValidator;
 import com.group1.grabyourgear.utils.EquipmentRepository;
 import com.group1.grabyourgear.utils.FirebaseHelper_Bookings;
 import com.group1.grabyourgear.utils.FirebaseHelper_Equipment;
@@ -112,6 +114,10 @@ public class CustomerBookingActivity extends BaseActivity {
 
                 // 遍历所有 Booking，提取日期范围
                 for (Booking booking : bookingList) {
+                    if (booking.getStatus().equals(FirebaseNodes.BookingStatus.COMPLETED)
+                    || booking.getStatus().equals(FirebaseNodes.BookingStatus.CANCELLED)
+                    || booking.getStatus().equals(FirebaseNodes.BookingStatus.REJECTED) ) continue;
+
                     addBookedRange(booking.getStartDate(), booking.getEndDate());
                 }
             }
@@ -132,13 +138,14 @@ public class CustomerBookingActivity extends BaseActivity {
         }
 
         Booking booking = new Booking(
+                null,
                 currentEquipment.getId(),
                 user.getUid(),
                 currentEquipment.getSupplierId(),
                 selectedStart,
                 selectedEnd,
                 selectedTotalPrice,
-                "pending",
+                FirebaseNodes.BookingStatus.PENDING,
                 System.currentTimeMillis()
         );
 
@@ -187,7 +194,7 @@ public class CustomerBookingActivity extends BaseActivity {
         // 组合验证器：今天以前不可选 + 已预定日期不可选
         List<CalendarConstraints.DateValidator> validators = new ArrayList<>();
         validators.add(DateValidatorPointForward.now());
-        validators.add(new com.yourpackage.name.DisabledDatesValidator(bookedDates));
+        validators.add(new DisabledDatesValidator(bookedDates));
 
         CalendarConstraints constraints = new CalendarConstraints.Builder()
                 .setValidator(CompositeDateValidator.allOf(validators))
