@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Grabyourgear">
         <activity
+            android:name=".supplier.SupplierManageOrdersActivity"
+            android:exported="false" />
+        <activity
+            android:name=".supplier.SupplierEditEquipmentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".supplier.SupplierMyEquipmentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".supplier.SupplierAddEquipmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".utils.TestActivity"
             android:exported="false" />
         <activity
@@ -25,8 +37,8 @@
             android:exported="false" />
         <activity
             android:name=".auth.ProfileActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".customer.CustomerMyBookingsActivity"
             android:exported="false" />
