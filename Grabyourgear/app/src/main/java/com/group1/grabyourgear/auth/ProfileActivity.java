@@ -164,6 +164,11 @@ public class ProfileActivity extends BaseActivity {
         }
 
         // password
+        if (newPassword != null && !newPassword.isEmpty() && newPassword.length() < 6) {
+            Toast.makeText(this, "New password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         if (!newPassword.equals(newConfirmPassword)) {
             Toast.makeText(ProfileActivity.this, "New Passwords do not match", Toast.LENGTH_SHORT).show();
             return;

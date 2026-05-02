@@ -1,5 +1,7 @@
 package com.group1.grabyourgear.models;
 
+import com.google.firebase.database.PropertyName;
+
 public class Users {
 
     private String uid;
@@ -10,6 +12,7 @@ public class Users {
     private String address;
     private String role;
     private String avatar;
+    @PropertyName("isApproved")
     private boolean isApproved;
 
     // Empty constructor (required for Firestore)
@@ -56,7 +59,9 @@ public class Users {
     public String getAvatar() { return avatar; }
     public void setAvatar(String avatar) { this.avatar = avatar; }
 
+    @PropertyName("isApproved")
     public boolean isApproved() { return isApproved; }
+    @PropertyName("isApproved")
     public void setApproved(boolean approved) { isApproved = approved; }
 }
 
