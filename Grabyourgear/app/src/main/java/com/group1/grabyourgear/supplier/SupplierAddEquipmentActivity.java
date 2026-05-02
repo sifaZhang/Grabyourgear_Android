@@ -134,16 +134,18 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
                 false
         );
 
-        ref.child(id).setValue(equipment);
+        ref.child(id).setValue(equipment)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(this, "Equipment added", Toast.LENGTH_SHORT).show();
+                    finish();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
 
     }
 
     private void showImage(String url) {
-        Glide.with(this)
-                .load(url)
-                .placeholder(R.drawable.placeholder_avatar)
-                .into(imgEquip);
-
         Glide.with(this)
                 .load(url)
                 .placeholder(R.drawable.placeholder_avatar)

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    android:background="@drawable/rounded_bg"
+    android:padding="8dp"
+    android:layout_margin="6dp">
+
+    <ImageView
+        android:id="@+id/imgEquipBooking"
+        android:layout_width="100dp"
+        android:layout_height="90dp"
+        android:background="#DDDDDD"
+        android:scaleType="centerCrop"/>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:id="@+id/tvItemStatusBooking"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:textSize="12sp"
+            android:textColor="#888888"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"/>
+
+        <LinearLayout
+            android:id="@+id/lyBookingActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/btnApproveBooking"
+                android:layout_width="70dp"
+                android:layout_height="28dp"
+                android:text="Approve"
+                android:textSize="12sp"
+                android:padding="0dp"
+                style="@style/AppButtonPrimaryStyle"/>
+
+            <Button
+                android:id="@+id/btnRejectBooking"
+                android:layout_width="70dp"
+                android:layout_height="28dp"
+                android:text="Reject"
+                android:textSize="12sp"
+                android:padding="0dp"
+                style="@style/AppButtonPrimaryStyle"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvItemTitleBooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Equipment Name"
+                android:textStyle="bold"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvDateRangeBooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date Range"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tvCustomerBooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tvItemPriceBooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Price"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
