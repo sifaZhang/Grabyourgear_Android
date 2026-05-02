@@ -72,7 +72,6 @@ public class SupplierManageOrdersActivity extends BaseActivity {
 
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             Booking booking = ds.getValue(Booking.class);
-
                             if(booking != null) {
                                 booking.setId(ds.getKey());
                                 bookingList.add(booking);
