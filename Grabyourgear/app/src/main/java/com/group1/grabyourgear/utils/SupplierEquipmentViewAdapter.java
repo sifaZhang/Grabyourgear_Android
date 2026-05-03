@@ -49,7 +49,8 @@ public class SupplierEquipmentViewAdapter extends RecyclerView.Adapter<SupplierE
         //holder.tvRating.setText(Html.fromHtml("<b>Rating:</b> " + item.getRating(), Html.FROM_HTML_MODE_LEGACY));
         holder.tvLocation.setText(Html.fromHtml("<b>Location:</b> " + item.getLocation(), Html.FROM_HTML_MODE_LEGACY));
         holder.tvPrice.setText(Html.fromHtml("<b>Price:</b> $" + df.format(item.getPricePerDay()) + " / day", Html.FROM_HTML_MODE_LEGACY));
-        //holder.tvDiscount.setText(Html.fromHtml("<b>Discount:</b> " + Math.round(item.getDiscount()) + "% OFF", Html.FROM_HTML_MODE_LEGACY));
+        holder.tvDiscount.setText(Html.fromHtml("<b>Discount:</b> " + Math.round(item.getDiscount()) + "% OFF", Html.FROM_HTML_MODE_LEGACY));
+        holder.tvStatus.setText(Html.fromHtml("<b>Status:</b> " + item.getStatus()));
 
         // Load image
         Glide.with(context)
@@ -85,7 +86,7 @@ public class SupplierEquipmentViewAdapter extends RecyclerView.Adapter<SupplierE
     public static class SupplierEquipmentViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgEquipment;
-        TextView tvCategory, tvTitle, tvLocation, tvPrice, tvStatus;
+        TextView tvCategory, tvTitle, tvLocation, tvPrice, tvStatus, tvDiscount;
         Button btnEdit, btnDelete;
 
         public SupplierEquipmentViewHolder(@NonNull View itemView) {
@@ -98,7 +99,7 @@ public class SupplierEquipmentViewAdapter extends RecyclerView.Adapter<SupplierE
             tvLocation = itemView.findViewById(R.id.tvItemLocationSupplier);
             tvPrice = itemView.findViewById(R.id.tvItemPriceSupplier);
             tvStatus = itemView.findViewById(R.id.tvItemStatusSupplier);
-            //tvDiscount = itemView.findViewById(R.id.tvItemDiscount);
+            tvDiscount = itemView.findViewById(R.id.tvItemDiscount);
 
             btnEdit = itemView.findViewById(R.id.btnEditEquipment);
             btnDelete = itemView.findViewById(R.id.btnDeleteEquipment);

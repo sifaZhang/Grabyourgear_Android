@@ -169,7 +169,7 @@ public class SupplierEditEquipmentActivity extends BaseActivity {
                 etDiscountEdit.setText(String.valueOf(currentEquipment.getDiscount()));
                 etLocationEdit.setText(currentEquipment.getLocation());
 
-                setSelectedCategory(currentEquipment.getCategoryId());
+                setSelectedCategory(getCategoryNameFromId(currentEquipment.getCategoryId()));
 
                 currentImgURL = currentEquipment.getImageUrl();
 
@@ -216,7 +216,8 @@ public class SupplierEditEquipmentActivity extends BaseActivity {
             return;
         }
 
-        String categoryId = String.valueOf(spinnerCatEdit.getSelectedItemId());
+        String selectedCategoryName = spinnerCatEdit.getSelectedItem().toString();
+        String categoryId = getCategoryIdFromName(selectedCategoryName);
 
         currentEquipment.setName(name);
         currentEquipment.setDescription(description);
@@ -237,5 +238,35 @@ public class SupplierEditEquipmentActivity extends BaseActivity {
                 .addOnFailureListener(e -> {
                     Toast.makeText(this, "Update failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private String getCategoryNameFromId(String categoryId) {
+        switch (categoryId) {
+            case "cat01":
+                return AppConstants.CurrentCategory.OFFICE;
+            case "cat02":
+                return AppConstants.CurrentCategory.ELECTRONIC;
+            case "cat03":
+                return AppConstants.CurrentCategory.CONSTRUCTION;
+            case "cat04":
+                return AppConstants.CurrentCategory.VEHICLE;
+            default:
+                return AppConstants.CurrentCategory.ALL;
+        }
+    }
+
+    private String getCategoryIdFromName(String categoryName) {
+        switch (categoryName) {
+            case AppConstants.CurrentCategory.VEHICLE:
+                return "cat04";
+            case AppConstants.CurrentCategory.OFFICE:
+                return "cat01";
+            case AppConstants.CurrentCategory.CONSTRUCTION:
+                return "cat03";
+            case AppConstants.CurrentCategory.ELECTRONIC:
+                return "cat02";
+            default:
+                return "Unknown Category";
+        }
     }
 }

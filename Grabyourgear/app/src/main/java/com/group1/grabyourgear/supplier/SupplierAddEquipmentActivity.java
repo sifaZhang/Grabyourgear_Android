@@ -111,7 +111,8 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
         String price = etPrice.getText().toString().trim();
         String discount = etDiscount.getText().toString().trim();
         String location = etLocation.getText().toString().trim();
-        Long selectedCategoryID = spinnerCategory.getSelectedItemId();
+        String selectedCategoryName = spinnerCategory.getSelectedItem().toString();
+        String categoryId = getCategoryIdFromName(selectedCategoryName);
         String imageUrl = imgUrl;
 
         String supplierID = UserManager.getInstance().getUser().getUid();
@@ -122,7 +123,7 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
         Equipment equipment = new Equipment(
                 id,
                 name,
-                Long.toString(selectedCategoryID),
+                categoryId,
                 supplierID,
                 Double.parseDouble(price),
                 Double.parseDouble(discount),
@@ -163,5 +164,20 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
         spinnerCategory.setSelection(0);
+    }
+
+    private String getCategoryIdFromName(String categoryName) {
+        switch (categoryName) {
+            case AppConstants.CurrentCategory.VEHICLE:
+                return "cat04";
+            case AppConstants.CurrentCategory.OFFICE:
+                return "cat01";
+            case AppConstants.CurrentCategory.CONSTRUCTION:
+                return "cat03";
+            case AppConstants.CurrentCategory.ELECTRONIC:
+                return "cat02";
+            default:
+                return "Unknown Category";
+        }
     }
 }

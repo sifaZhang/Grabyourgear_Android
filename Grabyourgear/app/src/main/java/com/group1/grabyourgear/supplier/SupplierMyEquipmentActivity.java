@@ -22,6 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.SupplierEquipmentViewAdapter;
 import com.group1.grabyourgear.utils.UserManager;
+import com.group1.grabyourgear.models.Category;
+import com.group1.grabyourgear.utils.CategoryRepository;
+import com.group1.grabyourgear.utils.FirebaseHelper_Categories;
 
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.models.Equipment;
@@ -51,9 +54,30 @@ public class SupplierMyEquipmentActivity extends BaseActivity {
 
         equipmentList = new ArrayList<>();
 
-        loadMyEquipment();
+        loadCategoriesThenEquipment();
     }
 
+    private void loadCategoriesThenEquipment() {
+        FirebaseHelper_Categories.loadAllCategories(new FirebaseHelper_Categories.CategoryListCallback() {
+            @Override
+            public void onSuccess(List<Category> list) {
+                CategoryRepository.getInstance().clearCachedCategories();
+                CategoryRepository.getInstance().setCachedCategories(list);
+                loadMyEquipment();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(
+                        SupplierMyEquipmentActivity.this,
+                        "Failed to load categories.",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+                loadMyEquipment();
+            }
+        });
+    }
     private void loadMyEquipment() {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 

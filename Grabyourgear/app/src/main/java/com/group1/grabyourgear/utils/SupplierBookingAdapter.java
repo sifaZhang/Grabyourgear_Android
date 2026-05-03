@@ -17,6 +17,8 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.models.Booking;
+import com.group1.grabyourgear.models.Equipment;
+import com.group1.grabyourgear.models.Users;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,15 +46,12 @@ public class SupplierBookingAdapter extends RecyclerView.Adapter<SupplierBooking
     public void onBindViewHolder(@NonNull SupplierBookingAdapter.BookingViewHolder holder, int position) {
         Booking booking = bookingList.get(position);
 
-        holder.tvTitle.setText("Equipment ID: " + booking.getEquipmentId());
+        holder.tvTitle.setText("Loading equipment...");
+        holder.tvEquipmentId.setText("ID: " + booking.getEquipmentId());
+        holder.tvCustomer.setText("Loading customer...");
 
         holder.tvDates.setText(Html.fromHtml(
                 "<b>Dates:</b> " + formatDate(booking.getStartDate()) + " - " + formatDate(booking.getEndDate()),
-                Html.FROM_HTML_MODE_LEGACY
-        ));
-
-        holder.tvCustomer.setText(Html.fromHtml(
-                "<b>Customer:</b> " + booking.getUserId(),
                 Html.FROM_HTML_MODE_LEGACY
         ));
 
@@ -66,6 +65,9 @@ public class SupplierBookingAdapter extends RecyclerView.Adapter<SupplierBooking
         Glide.with(context)
                 .load(R.drawable.placeholder_general)
                 .into(holder.imgEquipment);
+
+        loadEquipmentDetails(holder, booking.getEquipmentId());
+        loadCustomerDetails(holder, booking.getUserId());
 
         boolean isPending = "pending".equalsIgnoreCase(booking.getStatus());
 
@@ -87,7 +89,74 @@ public class SupplierBookingAdapter extends RecyclerView.Adapter<SupplierBooking
         });
     }
 
+    private void loadEquipmentDetails(BookingViewHolder holder, String equipmentId) {
+        FirebaseDatabase.getInstance()
+                .getReference("equipment")
+                .child(equipmentId)
+                .get()
+                .addOnSuccessListener(dataSnapshot -> {
+                    Equipment equipment = dataSnapshot.getValue(Equipment.class);
+
+                    if(equipment != null) {
+                        holder.tvTitle.setText(equipment.getName());
+
+                        Glide.with(context)
+                                .load(equipment.getImageUrl())
+                                .placeholder(R.drawable.placeholder_general)
+                                .into(holder.imgEquipment);
+                    } else {
+                        holder.tvTitle.setText("Unknown Equipment");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    holder.tvTitle.setText("Failed to load Equipment");
+                });
+    }
+
+    private void loadCustomerDetails(BookingViewHolder holder, String userId) {
+        FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(userId)
+                .get()
+                .addOnSuccessListener(dataSnapshot -> {
+                    Users user = dataSnapshot.getValue(Users.class);
+
+                    if(user != null) {
+                        String displayName;
+
+                        if(user.getName() != null && !user.getName().isEmpty()) {
+                            displayName = user.getName();
+                        } else if (user.getUsername() != null && !user.getUsername().isEmpty()) {
+                            displayName = user.getUsername();
+                        } else {
+                            displayName = user.getEmail();
+                        }
+
+                        holder.tvCustomer.setText(Html.fromHtml(
+                                "<b>Customer:</b> " + displayName,
+                                Html.FROM_HTML_MODE_LEGACY
+                        ));
+                    } else {
+                        holder.tvCustomer.setText(Html.fromHtml(
+                                "<b>Customer:</b> Unknown",
+                                Html.FROM_HTML_MODE_LEGACY
+                        ));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    holder.tvCustomer.setText(Html.fromHtml(
+                            "<b>Customer></b> Failed to load",
+                            Html.FROM_HTML_MODE_LEGACY
+                    ));
+                });
+    }
+
     private void updateStatus(String bookingId, String newStatus) {
+        if (bookingId == null || bookingId.isEmpty()) {
+            Toast.makeText(context, "Booking ID is missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         FirebaseDatabase.getInstance()
                 .getReference("bookings")
                 .child(bookingId)
@@ -115,7 +184,7 @@ public class SupplierBookingAdapter extends RecyclerView.Adapter<SupplierBooking
     public static class BookingViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imgEquipment;
-        TextView tvTitle, tvDates, tvCustomer, tvPrice, tvStatus;
+        TextView tvTitle, tvEquipmentId, tvDates, tvCustomer, tvPrice, tvStatus;
         Button btnApprove, btnReject;
 
         public BookingViewHolder(@NonNull View itemView) {
@@ -124,6 +193,7 @@ public class SupplierBookingAdapter extends RecyclerView.Adapter<SupplierBooking
             imgEquipment = itemView.findViewById(R.id.imgEquipBooking);
 
             tvTitle = itemView.findViewById(R.id.tvItemTitleBooking);
+            tvEquipmentId = itemView.findViewById(R.id.tvEquipmentIdBooking);
             tvDates = itemView.findViewById(R.id.tvDateRangeBooking);
             tvCustomer = itemView.findViewById(R.id.tvCustomerBooking);
             tvPrice = itemView.findViewById(R.id.tvItemPriceBooking);
