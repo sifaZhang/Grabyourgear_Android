@@ -37,7 +37,6 @@
                 android:columnCount="2"
                 android:useDefaultMargins="true">
 
-                <!-- Vehicles -->
                 <LinearLayout
                     android:id="@+id/lyAddProduct"
                     android:layout_width="0dp"
@@ -55,12 +54,11 @@
                         android:id="@+id/tvAddProduct"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add Product"
+                        android:text="Add Equipment"
                         style="@style/TextStyle1"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
 
-                <!-- Construction -->
                 <LinearLayout
                     android:id="@+id/lyMyProducts"
                     android:layout_width="0dp"
@@ -77,13 +75,12 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="My Products"
+                        android:text="My Equipment"
                         android:id="@+id/tvConstruction"
                         style="@style/TextStyle1"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
 
-                <!-- Orders -->
                 <LinearLayout
                     android:id="@+id/lyManageOrders"
                     android:layout_width="0dp"
@@ -106,7 +103,6 @@
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
 
-                <!-- Profile -->
                 <LinearLayout
                     android:id="@+id/lyStoreProfile"
                     android:layout_width="0dp"

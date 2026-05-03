@@ -17,6 +17,83 @@
         style="@style/SectionTitle"
         android:layout_margin="10dp"/>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:background="@drawable/rounded_bg"
+        android:padding="12dp"
+        android:layout_margin="10dp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <Spinner
+                android:id="@+id/spFilterStatusOrdersSupplier"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:text="Keyword"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <EditText
+                android:id="@+id/etFilterKeywordSupplierOrders"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <Button
+                android:id="@+id/btnClearOrdersSupplier"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Clear"
+                style="@style/AppButtonPrimaryStyle"/>
+
+            <Button
+                android:id="@+id/btnSearchOrdersSupplier"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Search"
+                android:layout_marginStart="8dp"
+                style="@style/AppButtonPrimaryStyle"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSupplierOrders"
         android:layout_width="match_parent"

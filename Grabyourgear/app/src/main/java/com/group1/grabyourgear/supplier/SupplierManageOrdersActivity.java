@@ -1,6 +1,11 @@
 package com.group1.grabyourgear.supplier;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -24,11 +29,16 @@ import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.SupplierBookingAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SupplierManageOrdersActivity extends BaseActivity {
     private RecyclerView recyclerView;
-    private List<Booking> bookingList;
+    private List<Booking> allBookingList, filteredBookingList;
+    private EditText etKeyword;
+    private Spinner spStatus;
+    private Button btnSearch, btnClear;
+    private SupplierBookingAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +56,57 @@ public class SupplierManageOrdersActivity extends BaseActivity {
         recyclerView = findViewById(R.id.rvSupplierOrders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        bookingList = new ArrayList<>();
+        spStatus = findViewById(R.id.spFilterStatusOrdersSupplier);
+        etKeyword = findViewById(R.id.etFilterKeywordSupplierOrders);
+        btnSearch = findViewById(R.id.btnSearchOrdersSupplier);
+        btnClear = findViewById(R.id.btnClearOrdersSupplier);
+
+        allBookingList = new ArrayList<>();
+        filteredBookingList = new ArrayList<>();
+
+        setupFilters();
+
+        adapter = new SupplierBookingAdapter(this, filteredBookingList);
+        recyclerView.setAdapter(adapter);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                applySearch();
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spStatus.setSelection(0);
+                etKeyword.setText("");
+
+                filteredBookingList.clear();
+                filteredBookingList.addAll(allBookingList);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         loadSupplierBookings();
+    }
+
+    private void setupFilters() {
+        List <String> statuses = Arrays.asList(
+                "All",
+                "pending",
+                "approved",
+                "rejected"
+        );
+
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                statuses
+        );
+
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spStatus.setAdapter(statusAdapter);
     }
 
     private void loadSupplierBookings() {
@@ -68,21 +126,19 @@ public class SupplierManageOrdersActivity extends BaseActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        bookingList.clear();
+                        allBookingList.clear();
 
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             Booking booking = ds.getValue(Booking.class);
                             if(booking != null) {
                                 booking.setId(ds.getKey());
-                                bookingList.add(booking);
+                                allBookingList.add(booking);
                             }
                         }
 
-                        SupplierBookingAdapter adapter = new SupplierBookingAdapter(
-                                SupplierManageOrdersActivity.this, bookingList
-                        );
-
-                        recyclerView.setAdapter(adapter);
+                        filteredBookingList.clear();
+                        filteredBookingList.addAll(allBookingList);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -92,5 +148,34 @@ public class SupplierManageOrdersActivity extends BaseActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void applySearch() {
+        filteredBookingList.clear();
+
+        String selectedStatus = spStatus.getSelectedItem().toString();
+        String keyword = etKeyword.getText().toString().trim().toLowerCase();
+
+        for(Booking booking : allBookingList) {
+            boolean matchesStatus = selectedStatus.equals("All")
+                    || (booking.getStatus() != null
+            && booking.getStatus().equalsIgnoreCase(selectedStatus));
+
+            boolean matchesKeyword = keyword.isEmpty()
+                    || containsIgnoreCase(booking.getId(), keyword)
+                    || containsIgnoreCase(booking.getEquipmentId(), keyword)
+                    || containsIgnoreCase(booking.getUserId(), keyword)
+                    || containsIgnoreCase(booking.getStatus(), keyword);
+
+            if(matchesStatus && matchesKeyword) {
+                filteredBookingList.add(booking);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
+    private boolean containsIgnoreCase(String value, String keyword) {
+        return value != null && value.toLowerCase().contains(keyword);
     }
 }

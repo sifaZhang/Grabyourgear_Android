@@ -1,6 +1,12 @@
 package com.group1.grabyourgear.supplier;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.SupplierEquipmentViewAdapter;
 import com.group1.grabyourgear.utils.UserManager;
@@ -30,11 +37,16 @@ import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.models.Equipment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SupplierMyEquipmentActivity extends BaseActivity {
     RecyclerView recyclerView;
-    List<Equipment> equipmentList;
+    List<Equipment> allEquipmentList, filteredEquipmentList;
+    SupplierEquipmentViewAdapter adapter;
+    Spinner spCategory, spStatus;
+    EditText etLocation, etKeyword;
+    Button btnSearch, btnClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +59,81 @@ public class SupplierMyEquipmentActivity extends BaseActivity {
             return insets;
         });
 
-        setHeaderTitle("My Products");
+        setHeaderTitle("My Equipment");
 
+        spCategory = findViewById(R.id.spFilterCategorySupplier);
+        spStatus = findViewById(R.id.spFilterStatusSupplier);
+        etLocation = findViewById(R.id.etFilterLocationSupplier);
+        etKeyword = findViewById(R.id.etFilterKeywordSupplier);
+        btnClear = findViewById(R.id.btnClearMyEquipSupplier);
+        btnSearch = findViewById(R.id.btnSearchMyEquipSupplier);
         recyclerView = findViewById(R.id.rvMyProductSupplier);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        equipmentList = new ArrayList<>();
+        allEquipmentList = new ArrayList<>();
+        filteredEquipmentList = new ArrayList<>();
+
+        setupFilters();
+
+        adapter = new SupplierEquipmentViewAdapter(this, filteredEquipmentList);
+        recyclerView.setAdapter(adapter);
+
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                applySearch();
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                spCategory.setSelection(0);
+                spStatus.setSelection(0);
+                etKeyword.setText("");
+                etLocation.setText("");
+
+                filteredEquipmentList.clear();
+                filteredEquipmentList.addAll(allEquipmentList);
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         loadCategoriesThenEquipment();
+    }
+
+    private void setupFilters() {
+        List<String> categories = Arrays.asList(
+                AppConstants.CurrentCategory.ALL,
+                AppConstants.CurrentCategory.VEHICLE,
+                AppConstants.CurrentCategory.CONSTRUCTION,
+                AppConstants.CurrentCategory.ELECTRONIC,
+                AppConstants.CurrentCategory.OFFICE
+        );
+
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                categories
+        );
+
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCategory.setAdapter(categoryAdapter);
+
+        List<String> statuses = Arrays.asList(
+                "All",
+                "available",
+                "unavailable",
+                "rented"
+        );
+
+        ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                statuses
+        );
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spStatus.setAdapter(statusAdapter);
     }
 
     private void loadCategoriesThenEquipment() {
@@ -95,21 +174,20 @@ public class SupplierMyEquipmentActivity extends BaseActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        equipmentList.clear();
+                        allEquipmentList.clear();
 
                         for (DataSnapshot ds : snapshot.getChildren()) {
                             Equipment equipment = ds.getValue(Equipment.class);
+
                             if(equipment != null) {
-                                equipmentList.add(equipment);
+                                equipment.setId(ds.getKey());
+                                allEquipmentList.add(equipment);
                             }
                         }
 
-                        SupplierEquipmentViewAdapter adapter = new SupplierEquipmentViewAdapter(
-                                SupplierMyEquipmentActivity.this,
-                                equipmentList
-                        );
-
-                        recyclerView.setAdapter(adapter);
+                        filteredEquipmentList.clear();
+                        filteredEquipmentList.addAll(allEquipmentList);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
@@ -120,5 +198,37 @@ public class SupplierMyEquipmentActivity extends BaseActivity {
 
                     }
                 });
+    }
+
+    private void applySearch() {
+        filteredEquipmentList.clear();
+
+        String selectedCategory = spCategory.getSelectedItem().toString();
+        String selectedStatus = spStatus.getSelectedItem().toString();
+        String locationInput = etLocation.getText().toString().trim().toLowerCase();
+        String keywordInput = etKeyword.getText().toString().trim().toLowerCase();
+
+        for (Equipment eq : allEquipmentList) {
+            String categoryName = CategoryRepository.getInstance().getCategoryName(eq.getCategoryId());
+
+            boolean matchesCategory = selectedCategory.equals("All")
+                    || categoryName.equalsIgnoreCase(selectedCategory);
+
+            boolean matchesStatus = selectedStatus.equals("All")
+                    || (eq.getStatus() != null && eq.getStatus().equalsIgnoreCase(selectedStatus));
+
+            boolean matchesLocation = locationInput.isEmpty()
+                    || eq.getLocation().toLowerCase().contains(locationInput);
+
+            boolean matchesKeyword = keywordInput.isEmpty()
+                    || (eq.getName() != null && eq.getName().toLowerCase().contains(keywordInput)
+                    || (eq.getDescription() != null && eq.getDescription().toLowerCase().contains(keywordInput)));
+
+            if(matchesCategory && matchesStatus && matchesLocation && matchesKeyword) {
+                filteredEquipmentList.add(eq);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }
