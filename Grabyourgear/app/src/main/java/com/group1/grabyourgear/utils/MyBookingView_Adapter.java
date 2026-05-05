@@ -69,7 +69,10 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
             holder.tvItemTitle.setText(equipment.getName());
             holder.tvItemCategory.setText(equipment.getCategoryId());
             holder.tvItemLocation.setText(Html.fromHtml("<b>Location: </b>"  +equipment.getLocation(), Html.FROM_HTML_MODE_LEGACY));
-            holder.tvItemPrice.setText(Html.fromHtml("<b>Price: $</b>"  + + booking.getTotalPrice(), Html.FROM_HTML_MODE_LEGACY));
+            holder.tvItemPrice.setText(
+                    Html.fromHtml("<b>TotalPrice: $</b>" + String.format("%.2f", booking.getTotalPrice()),
+                            Html.FROM_HTML_MODE_LEGACY)
+            );
             holder.tvItemStatus.setText(Html.fromHtml("<b>Status: </b>"  + booking.getStatus(), Html.FROM_HTML_MODE_LEGACY));
             holder.btnCancel.setVisibility(booking.getStatus().equals(FirebaseNodes.BookingStatus.PENDING) ? View.VISIBLE : View.GONE);
 
