@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -78,35 +79,45 @@ public class CustomerMyBookingsActivity extends BaseActivity {
     }
 
     private void handleCancelBooking(Booking booking) {
-        FirebaseHelper_Bookings.updateBookingStatus(
-                booking.getId(),
-                FirebaseNodes.BookingStatus.CANCELLED,
-                new FirebaseHelper_Bookings.OnBookingUpdateListener() {
-                    @Override
-                    public void onSuccess() {
+            new AlertDialog.Builder(CustomerMyBookingsActivity.this)
+                    .setTitle("Confirmation")
+                    .setMessage("Ary you sure to cancel this booking?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        FirebaseHelper_Bookings.updateBookingStatus(
+                                booking.getId(),
+                                FirebaseNodes.BookingStatus.CANCELLED,
+                                new FirebaseHelper_Bookings.OnBookingUpdateListener() {
+                                    @Override
+                                    public void onSuccess() {
 
-                        booking.setStatus(FirebaseNodes.BookingStatus.CANCELLED);
+                                        booking.setStatus(FirebaseNodes.BookingStatus.CANCELLED);
 
-                        int index = adapter.getBookingIndex(booking.getId());
-                        adapter.notifyItemChanged(index);
+                                        int index = adapter.getBookingIndex(booking.getId());
+                                        adapter.notifyItemChanged(index);
 
-                        Toast.makeText(
-                                CustomerMyBookingsActivity.this,
-                                "Booking cancelled",
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
+                                        Toast.makeText(
+                                                CustomerMyBookingsActivity.this,
+                                                "Booking cancelled",
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                    }
 
-                    @Override
-                    public void onFailure(String error) {
-                        Toast.makeText(
-                                CustomerMyBookingsActivity.this,
-                                "Failed: " + error,
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                }
-        );
+                                    @Override
+                                    public void onFailure(String error) {
+                                        Toast.makeText(
+                                                CustomerMyBookingsActivity.this,
+                                                "Failed: " + error,
+                                                Toast.LENGTH_SHORT
+                                        ).show();
+                                    }
+                                }
+                        );
+                    })
+                    .setNegativeButton("No", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
+
     }
 
 }
