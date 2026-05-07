@@ -74,7 +74,7 @@ public class Adapter_MyBookingView extends RecyclerView.Adapter<Adapter_MyBookin
 
         if (equipment != null) {
             holder.tvItemTitle.setText(equipment.getName());
-            holder.tvItemCategory.setText(equipment.getCategoryId());
+            holder.tvItemCategory.setText(CategoryRepository.getInstance().getCategoryName(equipment.getCategoryId()));
             holder.tvItemLocation.setText(Html.fromHtml("<b>Location: </b>"  +equipment.getLocation(), Html.FROM_HTML_MODE_LEGACY));
             holder.tvItemPrice.setText(
                     Html.fromHtml("<b>TotalPrice: $</b>" + String.format("%.2f", booking.getTotalPrice()),
