@@ -25,25 +25,25 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class SupplierBookingAdapter extends RecyclerView.Adapter<SupplierBookingAdapter.BookingViewHolder> {
+public class Adapter_SupplierBooking extends RecyclerView.Adapter<Adapter_SupplierBooking.BookingViewHolder> {
 
     private Context context;
     private List<Booking> bookingList;
 
-    public SupplierBookingAdapter(Context context, List<Booking> bookingList) {
+    public Adapter_SupplierBooking(Context context, List<Booking> bookingList) {
         this.context = context;
         this.bookingList = bookingList;
     }
 
     @NonNull
     @Override
-    public SupplierBookingAdapter.BookingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Adapter_SupplierBooking.BookingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_supplier_booking, parent, false);
         return new BookingViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SupplierBookingAdapter.BookingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Adapter_SupplierBooking.BookingViewHolder holder, int position) {
         Booking booking = bookingList.get(position);
 
         holder.tvTitle.setText("Loading equipment...");

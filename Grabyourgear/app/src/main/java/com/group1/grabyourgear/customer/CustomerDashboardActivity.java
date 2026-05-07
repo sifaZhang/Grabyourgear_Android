@@ -24,7 +24,7 @@ import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.CategoryRepository;
 import com.group1.grabyourgear.utils.EquipmentRepository;
-import com.group1.grabyourgear.utils.EquipmentView_Adapter;
+import com.group1.grabyourgear.utils.Adapter_EquipmentView;
 import com.group1.grabyourgear.utils.FirebaseHelper_Categories;
 import com.group1.grabyourgear.utils.FirebaseHelper_Equipment;
 
@@ -93,7 +93,7 @@ public class CustomerDashboardActivity extends BaseActivity {
                     }
                 }
 
-                EquipmentView_Adapter adapter = new EquipmentView_Adapter(CustomerDashboardActivity.this, equipments);
+                Adapter_EquipmentView adapter = new Adapter_EquipmentView(CustomerDashboardActivity.this, equipments);
                 recyclerView.setAdapter(adapter);
             }
             @Override

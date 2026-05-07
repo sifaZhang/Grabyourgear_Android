@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.models.Booking;
 import com.group1.grabyourgear.utils.BaseActivity;
-import com.group1.grabyourgear.utils.SupplierBookingAdapter;
+import com.group1.grabyourgear.utils.Adapter_SupplierBooking;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class SupplierManageOrdersActivity extends BaseActivity {
     private EditText etKeyword;
     private Spinner spStatus;
     private Button btnSearch, btnClear;
-    private SupplierBookingAdapter adapter;
+    private Adapter_SupplierBooking adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,7 @@ public class SupplierManageOrdersActivity extends BaseActivity {
 
         setupFilters();
 
-        adapter = new SupplierBookingAdapter(this, filteredBookingList);
+        adapter = new Adapter_SupplierBooking(this, filteredBookingList);
         recyclerView.setAdapter(adapter);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {

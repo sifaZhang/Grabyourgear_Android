@@ -23,11 +23,11 @@ import com.group1.grabyourgear.supplier.SupplierEditEquipmentActivity;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class SupplierEquipmentViewAdapter extends RecyclerView.Adapter<SupplierEquipmentViewAdapter.SupplierEquipmentViewHolder> {
+public class Adapter_SupplierEquipmentView extends RecyclerView.Adapter<Adapter_SupplierEquipmentView.SupplierEquipmentViewHolder> {
     private Context context;
     private List<Equipment> equipmentList;
 
-    public SupplierEquipmentViewAdapter(Context context, List<Equipment> equipmentList) {
+    public Adapter_SupplierEquipmentView(Context context, List<Equipment> equipmentList) {
         this.context = context;
         this.equipmentList = equipmentList;
     }

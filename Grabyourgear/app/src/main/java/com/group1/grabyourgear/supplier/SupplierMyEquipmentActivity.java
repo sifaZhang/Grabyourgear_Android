@@ -2,7 +2,6 @@ package com.group1.grabyourgear.supplier;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,8 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.utils.BaseActivity;
-import com.group1.grabyourgear.utils.SupplierEquipmentViewAdapter;
-import com.group1.grabyourgear.utils.UserManager;
+import com.group1.grabyourgear.utils.Adapter_SupplierEquipmentView;
 import com.group1.grabyourgear.models.Category;
 import com.group1.grabyourgear.utils.CategoryRepository;
 import com.group1.grabyourgear.utils.FirebaseHelper_Categories;
@@ -43,7 +40,7 @@ import java.util.List;
 public class SupplierMyEquipmentActivity extends BaseActivity {
     RecyclerView recyclerView;
     List<Equipment> allEquipmentList, filteredEquipmentList;
-    SupplierEquipmentViewAdapter adapter;
+    Adapter_SupplierEquipmentView adapter;
     Spinner spCategory, spStatus;
     EditText etLocation, etKeyword;
     Button btnSearch, btnClear;
@@ -75,7 +72,7 @@ public class SupplierMyEquipmentActivity extends BaseActivity {
 
         setupFilters();
 
-        adapter = new SupplierEquipmentViewAdapter(this, filteredEquipmentList);
+        adapter = new Adapter_SupplierEquipmentView(this, filteredEquipmentList);
         recyclerView.setAdapter(adapter);
 
         btnSearch.setOnClickListener(new View.OnClickListener() {

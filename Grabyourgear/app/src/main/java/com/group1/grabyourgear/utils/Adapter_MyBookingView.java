@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Adapter.BookingViewHolder> {
+public class Adapter_MyBookingView extends RecyclerView.Adapter<Adapter_MyBookingView.BookingViewHolder> {
 
     private Context context;
     private List<Booking> bookingList;
@@ -40,7 +40,7 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
         void onRate(Booking booking);
     }
 
-    public MyBookingView_Adapter(Context context, List<Booking> bookingList,
+    public Adapter_MyBookingView(Context context, List<Booking> bookingList,
                                  List<Equipment> equipmentList,
                                  OnCancelClickListener cancelClickListener,
                                  OnRateClickListener rateClickListener) {

@@ -21,11 +21,11 @@ import com.group1.grabyourgear.models.Equipment;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class EquipmentView_Adapter extends RecyclerView.Adapter<EquipmentView_Adapter.EquipmentViewHolder> {
+public class Adapter_EquipmentView extends RecyclerView.Adapter<Adapter_EquipmentView.EquipmentViewHolder> {
         private Context context;
         private List<Equipment> equipmentList;
 
-        public EquipmentView_Adapter(Context context, List<Equipment> equipmentList) {
+        public Adapter_EquipmentView(Context context, List<Equipment> equipmentList) {
             this.context = context;
             this.equipmentList = equipmentList;
         }

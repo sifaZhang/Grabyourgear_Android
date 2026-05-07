@@ -1,15 +1,12 @@
 package com.group1.grabyourgear.customer;
 
-import android.app.Notification;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,21 +16,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Booking;
-import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.EquipmentRepository;
-import com.group1.grabyourgear.utils.EquipmentView_Adapter;
 import com.group1.grabyourgear.utils.FirebaseHelper_Bookings;
 import com.group1.grabyourgear.utils.FirebaseHelper_Equipment;
-import com.group1.grabyourgear.utils.MyBookingView_Adapter;
+import com.group1.grabyourgear.utils.Adapter_MyBookingView;
 import com.group1.grabyourgear.utils.UserManager;
 
 import java.util.List;
 
 public class CustomerMyBookingsActivity extends BaseActivity {
     RecyclerView recyclerView;
-    MyBookingView_Adapter adapter;
+    Adapter_MyBookingView adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +56,7 @@ public class CustomerMyBookingsActivity extends BaseActivity {
             @Override
             public void onSuccess(List<Booking> bookingList) {
                 // 遍历所有 Booking
-                adapter = new MyBookingView_Adapter(
+                adapter = new Adapter_MyBookingView(
                         CustomerMyBookingsActivity.this,
                         bookingList,
                         EquipmentRepository.getInstance().getCachedEquipment(),

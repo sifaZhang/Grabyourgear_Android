@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,7 +27,7 @@ import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.CategoryRepository;
 import com.group1.grabyourgear.utils.EquipmentRepository;
-import com.group1.grabyourgear.utils.EquipmentView_Adapter;
+import com.group1.grabyourgear.utils.Adapter_EquipmentView;
 import com.group1.grabyourgear.utils.FirebaseHelper_Bookings;
 import com.group1.grabyourgear.utils.FirebaseHelper_Equipment;
 
@@ -200,7 +199,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
                             }
 
                             //显示最终过滤结果
-                            EquipmentView_Adapter adapter = new EquipmentView_Adapter(CustomerEquipmentListActivity.this, finalFiltered);
+                            Adapter_EquipmentView adapter = new Adapter_EquipmentView(CustomerEquipmentListActivity.this, finalFiltered);
                             recyclerDeals.setAdapter(adapter);
                         }
 
@@ -214,7 +213,7 @@ public class CustomerEquipmentListActivity extends BaseActivity {
                 }
 
                 // 5. 显示
-                EquipmentView_Adapter adapter = new EquipmentView_Adapter(CustomerEquipmentListActivity.this, filteredList);
+                Adapter_EquipmentView adapter = new Adapter_EquipmentView(CustomerEquipmentListActivity.this, filteredList);
                 recyclerDeals.setAdapter(adapter);
             }
             @Override
