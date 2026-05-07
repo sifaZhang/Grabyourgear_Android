@@ -76,7 +76,7 @@ public class CustomerEquipmentDetailActivity extends BaseActivity {
         if (equipment != null) {
             DecimalFormat df = new DecimalFormat("0.00");
             tvRating.setText(Html.fromHtml("<b>⭐ Rating:</b> " + df.format(equipment.getRating()) + " / 5" + " (" + equipment.getRateCount() + " ratings)", Html.FROM_HTML_MODE_LEGACY));
-            tvCategory.setText(Html.fromHtml("<b>🪴 Category:</b> " + CategoryRepository.getInstance().getCategoryName(equipment.getId()), Html.FROM_HTML_MODE_LEGACY));
+            tvCategory.setText(Html.fromHtml("<b>🪴 Category:</b> " + capitalizeFirstLetter(CategoryRepository.getInstance().getCategoryName(equipment.getCategoryId())), Html.FROM_HTML_MODE_LEGACY));
             tvLocation.setText(Html.fromHtml("<b>📍 Location:</b> " + equipment.getLocation(), Html.FROM_HTML_MODE_LEGACY));
             tvDiscount.setText(Html.fromHtml("<b>💵 Discount:</b> <font color='red'>" + Math.round(equipment.getDiscount()) + "%</font> OFF", Html.FROM_HTML_MODE_LEGACY));
             tvPrice.setText(Html.fromHtml("<b>💰 Price:</b> $" + df.format(equipment.getPricePerDay()) + " / day", Html.FROM_HTML_MODE_LEGACY));
@@ -115,4 +115,10 @@ public class CustomerEquipmentDetailActivity extends BaseActivity {
             });
         }
     }
+
+    public static String capitalizeFirstLetter(String text) {
+        if (text == null || text.isEmpty()) return text;
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
+
 }
