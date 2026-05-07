@@ -12,6 +12,7 @@ public class Equipment {
     private String imageUrl;
     private String location;
     private double rating;
+    private int rateCount;
     private String status;
     private boolean isLocked;
 
@@ -22,7 +23,7 @@ public class Equipment {
     public Equipment(String id, String name, String categoryId, String supplierId,
                      double pricePerDay, double discount, String description,
                      String imageUrl, String location, double rating, String status,
-                     boolean isLocked) {
+                     boolean isLocked, int rateCount) {
         this.id = id;
         this.name = name;
         this.categoryId = categoryId;
@@ -33,6 +34,7 @@ public class Equipment {
         this.imageUrl = imageUrl;
         this.location = location;
         this.rating = rating;
+        this.rateCount = rateCount;
         this.status = status;
         this.isLocked = isLocked;
     }
@@ -67,6 +69,9 @@ public class Equipment {
 
     public double getRating() { return rating; }
     public void setRating(double rating) { this.rating = rating; }
+
+    public int getRateCount() { return rateCount; }
+    public void setRateCount(int rateCount) { this.rateCount = rateCount; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }

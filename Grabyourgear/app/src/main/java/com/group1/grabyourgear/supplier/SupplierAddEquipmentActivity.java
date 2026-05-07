@@ -132,7 +132,8 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
                 location,
                 0.0,
                 "available",
-                false
+                false,
+                0
         );
 
         ref.child(id).setValue(equipment)

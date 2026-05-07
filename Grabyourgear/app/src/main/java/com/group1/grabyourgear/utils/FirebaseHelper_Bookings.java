@@ -113,4 +113,24 @@ public class FirebaseHelper_Bookings {
                     if (listener != null) listener.onFailure(e.getMessage());
                 });
     }
+
+    ////// Update booking rating
+    public interface OnBookingRatingUpdateListener {
+        void onSuccess();
+        void onFailure(String error);
+    }
+
+    public static void updateBookingRating(String bookingId, double newRating,
+                                           OnBookingRatingUpdateListener listener) {
+
+        BOOKING_REF.child(bookingId).child("rating")
+                .setValue(newRating)
+                .addOnSuccessListener(aVoid -> {
+                    if (listener != null) listener.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    if (listener != null) listener.onFailure(e.getMessage());
+                });
+    }
+
 }

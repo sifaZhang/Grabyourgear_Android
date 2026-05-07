@@ -30,18 +30,25 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
     private List<Booking> bookingList;
     private List<Equipment> equipmentList; // 需要设备信息来显示图片、标题等
     private OnCancelClickListener cancelClickListener;
+    private OnRateClickListener rateClickListener;
 
     public interface OnCancelClickListener {
         void onCancel(Booking booking);
     }
 
+    public interface OnRateClickListener {
+        void onRate(Booking booking);
+    }
+
     public MyBookingView_Adapter(Context context, List<Booking> bookingList,
                                  List<Equipment> equipmentList,
-                                 OnCancelClickListener cancelClickListener) {
+                                 OnCancelClickListener cancelClickListener,
+                                 OnRateClickListener rateClickListener) {
         this.context = context;
         this.bookingList = bookingList;
         this.equipmentList = equipmentList;
         this.cancelClickListener = cancelClickListener;
+        this.rateClickListener = rateClickListener;
     }
 
     @NonNull
@@ -74,8 +81,13 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
                             Html.FROM_HTML_MODE_LEGACY)
             );
             holder.tvItemStatus.setText(Html.fromHtml("<b>Status: </b>"  + booking.getStatus(), Html.FROM_HTML_MODE_LEGACY));
+            if (booking.getRating() == 0) {
+                holder.tvItemRate.setText(Html.fromHtml("<b>Your Rating: </b>" + "(No rate yet)", Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                holder.tvItemRate.setText(Html.fromHtml("<b>Your Rating: </b>" + String.valueOf(booking.getRating()) + " / 5", Html.FROM_HTML_MODE_LEGACY));
+            }
             holder.btnCancel.setVisibility(booking.getStatus().equals(FirebaseNodes.BookingStatus.PENDING) ? View.VISIBLE : View.GONE);
-
+            holder.btnRate.setVisibility(booking.getStatus().equals(FirebaseNodes.BookingStatus.COMPLETED) ? View.VISIBLE : View.GONE);
 
             Glide.with(context)
                     .load(equipment.getImageUrl())
@@ -93,6 +105,12 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
         holder.btnCancel.setOnClickListener(v -> {
             if (cancelClickListener != null) {
                 cancelClickListener.onCancel(booking);
+            }
+        });
+
+        holder.btnRate.setOnClickListener(v -> {
+            if (rateClickListener != null) {
+                rateClickListener.onRate(booking);
             }
         });
     }
@@ -113,13 +131,14 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
 
     public static class BookingViewHolder extends RecyclerView.ViewHolder {
         ImageView imgEquipment;
-        TextView tvItemCategory, tvItemTitle, tvDateRange, tvItemLocation, tvItemPrice, tvItemStatus;
-        Button btnCancel;
+        TextView tvItemCategory, tvItemTitle, tvDateRange, tvItemLocation, tvItemPrice, tvItemStatus, tvItemRate;
+        Button btnCancel, btnRate;
 
         public BookingViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imgEquipment = itemView.findViewById(R.id.imgEquipment);
+            tvItemRate = itemView.findViewById(R.id.tvItemRate);
             tvItemCategory = itemView.findViewById(R.id.tvItemCategory);
             tvItemTitle = itemView.findViewById(R.id.tvItemTitle);
             tvDateRange = itemView.findViewById(R.id.tvDateRange);
@@ -127,6 +146,17 @@ public class MyBookingView_Adapter extends RecyclerView.Adapter<MyBookingView_Ad
             tvItemPrice = itemView.findViewById(R.id.tvItemPrice);
             tvItemStatus = itemView.findViewById(R.id.tvItemStatus);
             btnCancel = itemView.findViewById(R.id.btnCancel);
+            btnRate = itemView.findViewById(R.id.btnRate);
+        }
+    }
+
+    public void updateBooking(Booking updatedBooking) {
+        for (int i = 0; i < bookingList.size(); i++) {
+            if (bookingList.get(i).getId().equals(updatedBooking.getId())) {
+                bookingList.set(i, updatedBooking);
+                notifyItemChanged(i);
+                break;
+            }
         }
     }
 }

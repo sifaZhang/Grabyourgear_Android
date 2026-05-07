@@ -1,5 +1,7 @@
 package com.group1.grabyourgear.utils;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -10,7 +12,9 @@ import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Equipment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseHelper_Equipment {
     private static final DatabaseReference EQUIPMENT_REF =
@@ -69,4 +73,25 @@ public class FirebaseHelper_Equipment {
                 });
     }
 
+    //update rating and count
+    public interface OnEquipmentUpdateListener {
+        void onSuccess();
+        void onFailure(String error);
+    }
+
+    public static void updateRatingAndCount(String equipmentId, double rating, int rateCount,
+                                            OnEquipmentUpdateListener listener) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("rating", rating);
+        updates.put("rateCount", rateCount);
+
+        EQUIPMENT_REF.child(equipmentId)
+                .updateChildren(updates)
+                .addOnSuccessListener(aVoid -> {
+                    if (listener != null) listener.onSuccess();
+                })
+                .addOnFailureListener(e -> {
+                    if (listener != null) listener.onFailure(e.getMessage());
+                });
+    }
 }

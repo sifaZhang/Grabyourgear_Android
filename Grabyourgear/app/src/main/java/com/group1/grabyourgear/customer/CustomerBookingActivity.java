@@ -146,7 +146,8 @@ public class CustomerBookingActivity extends BaseActivity {
                 selectedEnd,
                 selectedTotalPrice,
                 FirebaseNodes.BookingStatus.PENDING,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                0
         );
 
         FirebaseHelper_Bookings.createBooking(booking, new FirebaseHelper_Bookings.BookingCreateCallback() {

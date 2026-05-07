@@ -11,6 +11,7 @@ public class Booking {
     private double totalPrice;
     private String status;
     private long timestamp;
+    private double rating;
 
     // Firebase required empty constructor
     public Booking() {}
@@ -18,7 +19,7 @@ public class Booking {
     // Full constructor (id optional depending on your usage)
     public Booking(String id, String equipmentId, String userId, String supplierId,
                    long startDate, long endDate, double totalPrice,
-                   String status, long timestamp) {
+                   String status, long timestamp, double rating) {
 
         this.id = id;
         this.equipmentId = equipmentId;
@@ -29,6 +30,7 @@ public class Booking {
         this.totalPrice = totalPrice;
         this.status = status;
         this.timestamp = timestamp;
+        this.rating = rating;
     }
 
     // Getter & Setter for id
@@ -103,5 +105,13 @@ public class Booking {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
     }
 }

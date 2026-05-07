@@ -44,7 +44,11 @@ public class EquipmentView_Adapter extends RecyclerView.Adapter<EquipmentView_Ad
             DecimalFormat df = new DecimalFormat("0.00");
             holder.tvTitle.setText(item.getName());
             holder.tvCategory.setText(CategoryRepository.getInstance().getCategoryName(item.getCategoryId()));
-            holder.tvRating.setText(Html.fromHtml("<b>Rating:</b> " + item.getRating(), Html.FROM_HTML_MODE_LEGACY));
+            if (item.getRateCount() == 0) {
+                holder.tvRating.setText(Html.fromHtml("<b>Rating:</b> (No rate yet)", Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                holder.tvRating.setText(Html.fromHtml("<b>Rating:</b> " + df.format(item.getRating()) + " / 5 (" + item.getRateCount() + " ratings)", Html.FROM_HTML_MODE_LEGACY));
+            }
             holder.tvLocation.setText(Html.fromHtml("<b>Location:</b> " + item.getLocation(), Html.FROM_HTML_MODE_LEGACY));
             holder.tvPrice.setText(Html.fromHtml("<b>Price:</b> $" + df.format(item.getPricePerDay()) + " / day", Html.FROM_HTML_MODE_LEGACY));
             holder.tvDiscount.setText(Html.fromHtml("<b>Discount:</b> " + Math.round(item.getDiscount()) + "% OFF", Html.FROM_HTML_MODE_LEGACY));
