@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group1.grabyourgear.common.AppConstants;
+import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.Adapter_SupplierEquipmentView;
 import com.group1.grabyourgear.models.Category;
@@ -119,9 +120,9 @@ public class SupplierMyEquipmentActivity extends BaseActivity {
 
         List<String> statuses = Arrays.asList(
                 "All",
-                "available",
-                "unavailable",
-                "rented"
+                FirebaseNodes.EquipmentStatus.AVAILABLE,
+                FirebaseNodes.EquipmentStatus.UNAVAILABLE,
+                FirebaseNodes.EquipmentStatus.MAINTENANCE
         );
 
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(

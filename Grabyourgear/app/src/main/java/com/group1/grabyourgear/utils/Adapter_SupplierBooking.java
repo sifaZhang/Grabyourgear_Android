@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Booking;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.models.Users;
@@ -69,7 +70,7 @@ public class Adapter_SupplierBooking extends RecyclerView.Adapter<Adapter_Suppli
         loadEquipmentDetails(holder, booking.getEquipmentId());
         loadCustomerDetails(holder, booking.getUserId());
 
-        boolean isPending = "pending".equalsIgnoreCase(booking.getStatus());
+        boolean isPending = FirebaseNodes.BookingStatus.PENDING.equalsIgnoreCase(booking.getStatus());
 
         holder.btnApprove.setVisibility(isPending ? View.VISIBLE : View.GONE);
         holder.btnReject.setVisibility(isPending ? View.VISIBLE : View.GONE);
@@ -77,14 +78,14 @@ public class Adapter_SupplierBooking extends RecyclerView.Adapter<Adapter_Suppli
         holder.btnApprove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateStatus(booking.getId(), "approved");
+                updateStatus(booking.getId(), FirebaseNodes.BookingStatus.CONFIRMED);
             }
         });
 
         holder.btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                updateStatus(booking.getId(), "rejected");
+                updateStatus(booking.getId(), FirebaseNodes.BookingStatus.REJECTED);
             }
         });
     }

@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +24,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Booking;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.Adapter_SupplierBooking;
@@ -93,9 +95,11 @@ public class SupplierManageOrdersActivity extends BaseActivity {
     private void setupFilters() {
         List <String> statuses = Arrays.asList(
                 "All",
-                "pending",
-                "approved",
-                "rejected"
+                FirebaseNodes.BookingStatus.PENDING,
+                FirebaseNodes.BookingStatus.CONFIRMED,
+                FirebaseNodes.BookingStatus.CANCELLED,
+                FirebaseNodes.BookingStatus.REJECTED,
+                FirebaseNodes.BookingStatus.COMPLETED
         );
 
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(

@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.auth.ProfileActivity;
 import com.group1.grabyourgear.common.AppConstants;
+import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.utils.CloudinaryUploader;
 import com.group1.grabyourgear.utils.UploadCallback;
@@ -131,7 +132,7 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
                 imageUrl,
                 location,
                 0.0,
-                "available",
+                FirebaseNodes.EquipmentStatus.AVAILABLE,
                 false,
                 0
         );
