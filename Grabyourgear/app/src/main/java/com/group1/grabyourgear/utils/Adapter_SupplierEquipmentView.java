@@ -19,6 +19,7 @@ import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.supplier.SupplierEditEquipmentActivity;
+import com.group1.grabyourgear.supplier.SupplierEquipmentDetailActivity;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -75,6 +76,16 @@ public class Adapter_SupplierEquipmentView extends RecyclerView.Adapter<Adapter_
             equipmentList.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, equipmentList.size());
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SupplierEquipmentDetailActivity.class);
+                intent.putExtra(AppConstants.IntenParamer.EQUIPMENT_ID, item.getId());
+                intent.putExtra("mode", "equipment");
+                context.startActivity(intent);
+            }
         });
     }
 

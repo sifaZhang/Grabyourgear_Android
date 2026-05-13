@@ -1,6 +1,7 @@
 package com.group1.grabyourgear.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.AppConstants;
 import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Booking;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.models.Users;
+import com.group1.grabyourgear.supplier.SupplierEquipmentDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -86,6 +89,18 @@ public class Adapter_SupplierBooking extends RecyclerView.Adapter<Adapter_Suppli
             @Override
             public void onClick(View view) {
                 updateStatus(booking.getId(), FirebaseNodes.BookingStatus.REJECTED);
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, SupplierEquipmentDetailActivity.class);
+                intent.putExtra(AppConstants.IntenParamer.EQUIPMENT_ID, booking.getEquipmentId());
+                intent.putExtra("bookingId", booking.getId());
+                intent.putExtra("bookingStatus", booking.getStatus());
+                intent.putExtra("mode", "booking");
+                context.startActivity(intent);
             }
         });
     }
