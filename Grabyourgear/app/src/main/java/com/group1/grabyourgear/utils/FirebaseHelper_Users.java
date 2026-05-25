@@ -1,14 +1,22 @@
 package com.group1.grabyourgear.utils;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Users;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,9 +38,26 @@ public class FirebaseHelper_Users {
         }).addOnFailureListener(callback::onFailure);
     }
 
-    // TODO: Function to get count of suppliers pending approval
 
+    // Load all users
+    public interface UserListCallback {
+        void onSuccess(List<Users> usersList);
+        void onFailure(Exception e);
+    }
 
+    public static void loadAllUsers(UserListCallback callback) {
+        USERS_REF.get().addOnSuccessListener(snapshot -> {
+            List<Users> list = new ArrayList<>();
+            for (DataSnapshot child : snapshot.getChildren()) {
+                Users user = child.getValue(Users.class);
+                if (user != null) {
+                    list.add(user);
+                }
+            }
+
+            callback.onSuccess(list);
+        }).addOnFailureListener(callback::onFailure);
+    }
 
 
 

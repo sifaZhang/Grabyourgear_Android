@@ -46,6 +46,7 @@
                     style="@style/TextStyle1"
                     />
                 <TextView
+                    android:id="@+id/tv_pending_applications"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -85,7 +86,8 @@
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_list"/>
+                    android:src="@drawable/ic_list"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -100,6 +102,19 @@
                 android:elevation="4dp"
                 android:background="@drawable/rounded_bg"
                 style="@style/CommonContainer">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_storeprofile"
+                    app:tint="#4CAF50" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Manage Suppliers"
+                    style="@style/TextStyle1"
+                    />
 
 
             </LinearLayout>

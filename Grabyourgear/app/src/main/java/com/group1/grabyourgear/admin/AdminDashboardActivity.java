@@ -1,6 +1,8 @@
 package com.group1.grabyourgear.admin;
 
 import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,12 +10,22 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
+import com.group1.grabyourgear.common.FirebaseNodes;
+import com.group1.grabyourgear.models.Users;
 import com.group1.grabyourgear.utils.BaseActivity;
 import com.group1.grabyourgear.utils.FirebaseHelper_Users;
 import com.group1.grabyourgear.utils.UserManager;
 
+import java.util.List;
+import java.util.Objects;
+
 public class AdminDashboardActivity extends BaseActivity {
+
+    //int userCount = 0;
+    TextView tvPendingApplications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +46,30 @@ public class AdminDashboardActivity extends BaseActivity {
 //            // show not approved message
 //        }
 
+        tvPendingApplications = findViewById(R.id.tv_pending_applications);
+
         // Need to get count of pending suppliers for the count thing
+        FirebaseHelper_Users.loadAllUsers(new FirebaseHelper_Users.UserListCallback() {
+            @Override
+            public void onSuccess(List<Users> usersList) {
+                int userCount = 0;
+                for (Users u : usersList) {
+                    if (Objects.equals(u.getRole(), "supplier") && !u.isApproved()) {
+                        userCount++;
+                    }
+                }
+
+                tvPendingApplications.setText("" + userCount);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(AdminDashboardActivity.this,
+                        "Supplier count retrieval failed",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
+
 }
