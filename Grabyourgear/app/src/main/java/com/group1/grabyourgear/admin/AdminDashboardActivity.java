@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.utils.BaseActivity;
+import com.group1.grabyourgear.utils.FirebaseHelper_Users;
 import com.group1.grabyourgear.utils.UserManager;
 
 public class AdminDashboardActivity extends BaseActivity {
@@ -32,5 +33,8 @@ public class AdminDashboardActivity extends BaseActivity {
 //        } else {
 //            // show not approved message
 //        }
+
+        // Need to get count of pending suppliers for the count thing
+
     }
 }

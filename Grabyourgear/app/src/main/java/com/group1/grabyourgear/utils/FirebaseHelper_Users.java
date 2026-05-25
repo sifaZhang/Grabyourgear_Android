@@ -10,6 +10,7 @@ import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Users;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class FirebaseHelper_Users {
 
@@ -28,6 +29,9 @@ public class FirebaseHelper_Users {
             callback.onSuccess(user);
         }).addOnFailureListener(callback::onFailure);
     }
+
+    // TODO: Function to get count of suppliers pending approval
+
 
 
 
