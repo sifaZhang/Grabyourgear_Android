@@ -1,5 +1,6 @@
 package com.group1.grabyourgear.supplier;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -163,18 +165,62 @@ public class SupplierEquipmentDetailActivity extends BaseActivity {
         btnSecondary.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseDatabase.getInstance()
-                        .getReference(FirebaseNodes.EQUIPMENT)
-                        .child(equipmentId)
-                        .removeValue()
-                        .addOnSuccessListener(unused -> {
-                            Toast.makeText(getApplicationContext(), "Equipment deleted", Toast.LENGTH_SHORT).show();
-                            finish();
+                new AlertDialog.Builder(SupplierEquipmentDetailActivity.this)
+                        .setTitle("Delete Equipment")
+                        .setMessage("Are you sure you want to delete this equipment?")
+                        .setPositiveButton("Delete", (dialog, which) -> {
+
+                            FirebaseDatabase.getInstance()
+                                    .getReference(FirebaseNodes.EQUIPMENT)
+                                    .child(equipmentId)
+                                    .removeValue()
+                                    .addOnSuccessListener(unused -> {
+                                        deleteRelatedBookings(equipmentId, () -> {
+                                            Toast.makeText(
+                                                    SupplierEquipmentDetailActivity.this,
+                                                    "Equipment and related bookings deleted",
+                                                    Toast.LENGTH_SHORT
+                                            ).show();
+                                            finish();
+                                        });
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(SupplierEquipmentDetailActivity.this, "Delete failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
                         })
-                        .addOnFailureListener(e ->
-                                Toast.makeText(getApplicationContext(), "Delete failed", Toast.LENGTH_SHORT).show());
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        })
+                        .show();
             }
         });
+    }
+    private void deleteRelatedBookings(String equipmentId, Runnable onComplete) {
+        FirebaseDatabase.getInstance()
+                .getReference(FirebaseNodes.BOOKINGS)
+                .get()
+                .addOnSuccessListener(dataSnapshot -> {
+                    for(DataSnapshot bookingSnapshot : dataSnapshot.getChildren()) {
+                        String bookingEquipmentId = bookingSnapshot
+                                .child(FirebaseNodes.BookingsFields.EQUIPMENT_ID)
+                                .getValue(String.class);
+
+                        if(equipmentId.equals(bookingEquipmentId)) {
+                            bookingSnapshot.getRef().removeValue();
+                        }
+                    }
+
+                    onComplete.run();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(
+                            SupplierEquipmentDetailActivity.this,
+                            "Equipment deleted, but bookings could not be checked.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    onComplete.run();
+                });
     }
 
     private void setupBookingButtons() {

@@ -119,6 +119,19 @@ public abstract class BaseActivity extends AppCompatActivity {
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.getMenuInflater().inflate(R.menu.avatar_menu, popup.getMenu());
 
+        Users currentUser = UserManager.getInstance().getUser();
+
+        if(currentUser == null) {
+            Toast.makeText(this, "User session expired. Please log in again.", Toast.LENGTH_SHORT).show();
+
+            UserPrefs prefs = new UserPrefs(this);
+            prefs.clear();
+
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
         if(UserManager.getInstance().getUser().getRole().equals(AppConstants.Role.CUSTOMER)){
             popup.getMenu().findItem(R.id.menu_myBookings).setVisible(true);
         }
