@@ -20,6 +20,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
@@ -116,7 +118,14 @@ public class SupplierAddEquipmentActivity extends AppCompatActivity {
         String categoryId = getCategoryIdFromName(selectedCategoryName);
         String imageUrl = imgUrl;
 
-        String supplierID = UserManager.getInstance().getUser().getUid();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if(firebaseUser == null) {
+            Toast.makeText(this, "Not logged in.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String supplierID = firebaseUser.getUid();
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("equipment");
         String id = ref.push().getKey();

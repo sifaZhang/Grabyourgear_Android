@@ -121,11 +121,23 @@ public class Adapter_SupplierBooking extends RecyclerView.Adapter<Adapter_Suppli
                                 .placeholder(R.drawable.placeholder_general)
                                 .into(holder.imgEquipment);
                     } else {
-                        holder.tvTitle.setText("Unknown Equipment");
+                        int currentPosition = holder.getAdapterPosition();
+
+                        if(currentPosition != RecyclerView.NO_POSITION) {
+                            bookingList.remove(currentPosition);
+                            notifyItemRemoved(currentPosition);
+                            notifyItemRangeChanged(currentPosition, bookingList.size());
+                        }
                     }
                 })
                 .addOnFailureListener(e -> {
-                    holder.tvTitle.setText("Failed to load Equipment");
+                    int currentPosition = holder.getAdapterPosition();
+
+                    if(currentPosition != RecyclerView.NO_POSITION) {
+                        bookingList.remove(currentPosition);
+                        notifyItemRemoved(currentPosition);
+                        notifyItemRangeChanged(currentPosition, bookingList.size());
+                    }
                 });
     }
 
