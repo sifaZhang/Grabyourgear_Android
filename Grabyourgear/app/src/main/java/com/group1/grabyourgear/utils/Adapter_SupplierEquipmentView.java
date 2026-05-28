@@ -1,5 +1,6 @@
 package com.group1.grabyourgear.utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.text.Html;
@@ -9,14 +10,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.group1.grabyourgear.R;
 import com.group1.grabyourgear.common.AppConstants;
+import com.group1.grabyourgear.common.FirebaseNodes;
 import com.group1.grabyourgear.models.Equipment;
 import com.group1.grabyourgear.supplier.SupplierEditEquipmentActivity;
 import com.group1.grabyourgear.supplier.SupplierEquipmentDetailActivity;
@@ -68,14 +72,39 @@ public class Adapter_SupplierEquipmentView extends RecyclerView.Adapter<Adapter_
 
         // Delete
         holder.btnDelete.setOnClickListener(v -> {
-            FirebaseDatabase.getInstance()
-                    .getReference("equipment")
-                    .child(item.getId())
-                    .removeValue();
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete Equipment")
+                    .setMessage("Are you sure you want to delete this equipment?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
 
-            equipmentList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, equipmentList.size());
+                        String equipmentId = item.getId();
+
+                        FirebaseDatabase.getInstance()
+                                .getReference(FirebaseNodes.EQUIPMENT)
+                                .child(equipmentId)
+                                .removeValue()
+                                .addOnSuccessListener(unused -> {
+
+                                    deleteRelatedBookings(equipmentId, () -> {
+                                        int currentPosition = holder.getAdapterPosition();
+
+                                        if (currentPosition != RecyclerView.NO_POSITION) {
+                                            equipmentList.remove(currentPosition);
+                                            notifyItemRemoved(currentPosition);
+                                            notifyItemRangeChanged(currentPosition, equipmentList.size());
+                                        }
+
+                                        Toast.makeText(context, "Equipment and related bookings deleted", Toast.LENGTH_SHORT).show();
+                                    });
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(context, "Delete failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         });
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +121,34 @@ public class Adapter_SupplierEquipmentView extends RecyclerView.Adapter<Adapter_
     @Override
     public int getItemCount() {
         return equipmentList.size();
+    }
+
+    private void deleteRelatedBookings(String equipmentId, Runnable onComplete) {
+        FirebaseDatabase.getInstance()
+                .getReference(FirebaseNodes.BOOKINGS)
+                .get()
+                .addOnSuccessListener(dataSnapshot -> {
+                    for(DataSnapshot bookingSnapshot : dataSnapshot.getChildren()) {
+                        String bookingEquipmentId = bookingSnapshot
+                                .child(FirebaseNodes.BookingsFields.EQUIPMENT_ID)
+                                .getValue(String.class);
+
+                        if(equipmentId.equals(bookingEquipmentId)) {
+                            bookingSnapshot.getRef().removeValue();
+                        }
+                    }
+
+                    onComplete.run();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(
+                            context,
+                            "Equipment deleted, but bookings could not be checked.",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    onComplete.run();
+                });
     }
 
     public static class SupplierEquipmentViewHolder extends RecyclerView.ViewHolder {
