@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -55,7 +56,9 @@ public class AdminReviewSuppliersActivity extends BaseActivity {
 
                 adapter = new Adapter_AdminSupplierApplicationView(
                         AdminReviewSuppliersActivity.this,
-                        applicationsList);
+                        applicationsList,
+                        application -> handleApproveClick(application),
+                        application -> handleDenyClick(application));
 
                 recyclerView.setAdapter(adapter);
             }
@@ -67,5 +70,40 @@ public class AdminReviewSuppliersActivity extends BaseActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void adminApproveOrDeny(Users application, boolean isApproved) {
+        // TODO: Handle what is done when an application is explicitly approved or denied
+        // through this screen. Would a denied application result in the account created being
+        // deleted? I just realized I haven't thought about that as much as I should have.
+        // For now, just set up the dialog box.
+
+        // Setting up strings/substrings based on whether this is called from the approve or deny buttons.
+        String dlgTitle = isApproved ? "Approve Application" : "Deny Application";
+        String buttonClicked = isApproved ? "approve" : "deny";
+        String adminChoice = isApproved ? "approved" : "denied";
+
+        new AlertDialog.Builder(AdminReviewSuppliersActivity.this)
+                .setTitle(dlgTitle)
+                .setMessage("Are you sure you want to " + buttonClicked + " this application?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    Toast.makeText(AdminReviewSuppliersActivity.this,
+                            "Application " + adminChoice + ".", Toast.LENGTH_SHORT).show();
+
+                    // TODO: If approved, update isApproved status of provided user/application with true
+                    // otherwise update it with no.
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    private void handleApproveClick(Users application) {
+        adminApproveOrDeny(application, true);
+    }
+
+    private void handleDenyClick(Users application) {
+        adminApproveOrDeny(application, false);
     }
 }

@@ -24,10 +24,25 @@ public class Adapter_AdminSupplierApplicationView extends RecyclerView.Adapter<A
 
     private List<Users> applicationsList;
 
-    public Adapter_AdminSupplierApplicationView(Context context, List<Users> applicationsList)
+    private OnApproveClickListener approveClickListener;
+    private OnDenyClickListener denyClickListener;
+
+    public interface OnApproveClickListener {
+        void onApprove(Users application);
+    }
+
+    public interface OnDenyClickListener {
+        void onDeny(Users application);
+    }
+
+    public Adapter_AdminSupplierApplicationView(Context context, List<Users> applicationsList,
+                                                OnApproveClickListener approveClickListener,
+                                                OnDenyClickListener denyClickListener)
     {
         this.context = context;
         this.applicationsList = applicationsList;
+        this.approveClickListener = approveClickListener;
+        this.denyClickListener = denyClickListener;
     }
 
     @NonNull
@@ -58,14 +73,16 @@ public class Adapter_AdminSupplierApplicationView extends RecyclerView.Adapter<A
         // Approve button
         holder.btnApprove.setOnClickListener(view -> {
             // Logic needs to be added, need to focus on just showing the list
-            Toast.makeText(context, "Approve clicked",
-                    Toast.LENGTH_SHORT).show();
+            if (approveClickListener != null) {
+                approveClickListener.onApprove(application);
+            }
         });
 
         // Deny button
         holder.btnDeny.setOnClickListener(view -> {
-            Toast.makeText(context, "Deny clicked",
-                    Toast.LENGTH_SHORT).show();
+            if (denyClickListener != null) {
+                denyClickListener.onDeny(application);
+            }
         });
     }
 
