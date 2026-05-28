@@ -1,6 +1,9 @@
 package com.group1.grabyourgear.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,8 +27,9 @@ import java.util.Objects;
 
 public class AdminDashboardActivity extends BaseActivity {
 
-    //int userCount = 0;
     TextView tvPendingApplications;
+
+    LinearLayout lySupplierApplications;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,15 @@ public class AdminDashboardActivity extends BaseActivity {
                 Toast.makeText(AdminDashboardActivity.this,
                         "Supplier count retrieval failed",
                         Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        lySupplierApplications = findViewById(R.id.ly_supplier_applications);
+        lySupplierApplications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AdminReviewSuppliersActivity.class);
+                startActivity(intent);
             }
         });
 

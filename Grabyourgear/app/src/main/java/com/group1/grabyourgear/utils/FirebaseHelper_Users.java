@@ -174,4 +174,10 @@ public class FirebaseHelper_Users {
             }
         });
     }
+
+    // Used for approving suppliers and banning/unbanning users
+    public static void updateApprovalStatus(String uid, boolean newStatus, UpdateCallback callback) {
+        // TODO: Handle updating approval status. Just getting activity set up to start with
+        //USERS_REF.child(uid).
+    }
 }

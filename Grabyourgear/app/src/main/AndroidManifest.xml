@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Grabyourgear">
         <activity
+            android:name=".admin.AdminReviewSuppliersActivity"
+            android:exported="false" />
+        <activity
             android:name=".supplier.SupplierEquipmentDetailActivity"
             android:exported="false" />
         <activity
