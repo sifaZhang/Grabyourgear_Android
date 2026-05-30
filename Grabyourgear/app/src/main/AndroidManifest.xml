@@ -24,6 +24,15 @@
             android:name=".supplier.SupplierEquipmentDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".service.ServiceUserFeedbackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".service.ServiceInquiryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".service.ServiceFAQActivity"
+            android:exported="false" />
+        <activity
             android:name=".supplier.SupplierManageOrdersActivity"
             android:exported="false" />
         <activity
