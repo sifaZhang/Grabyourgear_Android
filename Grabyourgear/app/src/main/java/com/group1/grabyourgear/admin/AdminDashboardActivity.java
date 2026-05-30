@@ -29,7 +29,7 @@ public class AdminDashboardActivity extends BaseActivity {
 
     TextView tvPendingApplications;
 
-    LinearLayout lySupplierApplications;
+    LinearLayout lySupplierApplications, lyUserManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,15 @@ public class AdminDashboardActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), AdminReviewSuppliersActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        lyUserManager = findViewById(R.id.ly_user_mgmt);
+        lyUserManager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AdminUserListActivity.class);
                 startActivity(intent);
             }
         });

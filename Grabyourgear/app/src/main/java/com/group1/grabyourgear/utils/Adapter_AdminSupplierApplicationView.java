@@ -67,7 +67,7 @@ public class Adapter_AdminSupplierApplicationView extends RecyclerView.Adapter<A
         // Load avatar
         Glide.with(context)
                 .load(application.getAvatar())
-                .placeholder(R.drawable.placeholder_general)
+                .placeholder(R.drawable.placeholder_avatar)
                 .into(holder.imgAvatar);
 
         // Approve button
